@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd"> 
+   <event name="customer_register_success">
+        <observer name="customer_register" instance="Sendinblue\Sendinblue\Observer\SibObserver"/>
+    </event>
+    <event name="customer_address_save_after">
+        <observer name="customer_address_after_save_obs" instance="Sendinblue\Sendinblue\Observer\SibaddrObserver"/>
+    </event>
+     <event name="newsletter_subscriber_save_after">
+        <observer name="newsletter_obs" instance="Sendinblue\Sendinblue\Observer\SibNlObserver"/>
+    </event>
+    <event name="checkout_onepage_controller_success_action">
+        <observer name="order_obs" instance="Sendinblue\Sendinblue\Observer\SibOrderObserver"/>
+    </event>
+    <event name="sales_order_shipment_save_after">
+        <observer name="shipped_obs" instance="Sendinblue\Sendinblue\Observer\SibShipObserver"/>
+    </event>
+</config>
+
+
+
+ 

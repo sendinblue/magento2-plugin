@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+	<menu>
+	  <add id="Sendinblue_Sendinblue::sendinblue" title="Sendinblue"  module="Sendinblue_Sendinblue" parent="Magento_Backend::content" sortOrder="50" dependsOnModule="Sendinblue_Sendinblue" resource="Sendinblue_Sendinblue::sendinblue"/>
+	  <add id="Sendinblue_Sendinblue::sendinblue_sib" title="Sendinblue Settings" module="Sendinblue_Sendinblue" parent="Sendinblue_Sendinblue::sendinblue" sortOrder="10" dependsOnModule="Sendinblue_Sendinblue" action="sendinblue/sib" resource="Sendinblue_Sendinblue::sendinblue"/>
+	</menu>
+</config>

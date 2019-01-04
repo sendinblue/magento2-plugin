@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Sendinblue_Sendinblue::css/sib.css"/>
+        <css src="Sendinblue_Sendinblue::css/jquery-ui.css"/>
+        <script src="Sendinblue_Sendinblue::js/jquery-ui.min.js"/>
+        <script src="Sendinblue_Sendinblue::js/jquery.multiselect.js"/>
+        
+        <script src="Sendinblue_Sendinblue::js/sib.js"/>
+        <title>Sendinblue Settings</title>
+    </head>
+    <body>
+
+        <referenceContainer  name="content">
+            <block class="Sendinblue\Sendinblue\Block\Adminhtml\SendinblueBlock" template="Sendinblue_Sendinblue::sib.phtml" />
+
+        </referenceContainer>
+
+    </body>
+</page>

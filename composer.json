@@ -1,0 +1,26 @@
+{
+   "name": "sendinblue/module-sendinblue", 
+   "description": "N/A",  
+   "type": "magento2-module",
+   "version": "2.0.2",
+   "license": [
+      "OSL-3.0",
+      "AFL-3.0" 
+   ],
+   "author": [
+      {
+         "name": "amar",
+         "email": "amarpaney@sendinblue.com",
+         "homepage": "http://sendinblue.com/",
+         "role": "Developer"
+      }
+   ], 
+   "autoload": { 
+      "files": [
+         "registration.php" 
+      ],
+      "psr-4": {
+         "Sendinblue\\Sendinblue\\": ""
+      }
+   }
+}
