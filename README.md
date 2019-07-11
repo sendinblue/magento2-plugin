@@ -3,8 +3,8 @@
 Blog module allows you to create a full-fledged blog on your [Magento 2](http://magento.com/) Store.
 
 ## Features
-  * With the SendinBlue plugin, you can find everything you need to easily and efficiently send your email & SMS campaigns to your prospects and customers.
-  * Synchronize your subscribers with SendinBlue (subscribed and unsubscribed contacts)
+  * With the Sendinblue plugin, you can find everything you need to easily and efficiently send your email & SMS campaigns to your prospects and customers.
+  * Synchronize your subscribers with Sendinblue (subscribed and unsubscribed contacts)
   * Easily create good looking emailings
   * Schedule your campaigns
   * Track your results and optimize

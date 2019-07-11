@@ -235,7 +235,7 @@ class Ajax extends \Magento\Backend\App\Action
                     $this->getResponse()->setBody($msgVal);
                 } else {
                     $model->updateDbData('api_smtp_status', 0);
-                    $msgVal = __('Your SMTP account is not activated and therefore you can\'t use SendinBlue SMTP. For more informations, please contact our support to: contact@sendinblue.com');
+                    $msgVal = __('Your SMTP account is not activated and therefore you can\'t use Sendinblue SMTP. For more informations, please contact our support to: contact@sendinblue.com');
                     $this->getResponse()->setHeader('Content-type', 'application/text');
                     $this->getResponse()->setBody($msgVal);
                 }

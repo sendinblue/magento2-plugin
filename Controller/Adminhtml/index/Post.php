@@ -92,7 +92,7 @@ class Post extends \Magento\Backend\App\Action
                 $relayData = $model->getDbData('relay_data_status');
                 if (!empty($userEmail) && $post['smtpservices'] == 1) {
                     if ($relayData == 'enabled') {
-                        $title = __('[SendinBlue SMTP] test email');
+                        $title = __('[Sendinblue SMTP] test email');
                         $tempName = 'sendinsmtp_conf';
                         $respMail = $model->smtpSendMail($userEmail, $title, $tempName, $paramVal = '');
                         if ($respMail['status'] == 1) {
@@ -105,7 +105,7 @@ class Post extends \Magento\Backend\App\Action
                             return;
                         }
                     } else {
-                        $this->messageManager->addError(__('Your SMTP account is not activated and therefore you can\'t use SendinBlue SMTP. For more informations, Please contact our support to: contact@sendinblue.com'));
+                        $this->messageManager->addError(__('Your SMTP account is not activated and therefore you can\'t use Sendinblue SMTP. For more informations, Please contact our support to: contact@sendinblue.com'));
                         $this->_redirect('sendinblue/sib/index');
                         return;
                     }
