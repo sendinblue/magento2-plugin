@@ -129,9 +129,6 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
         ); 
         $listResp = $mailin->createList($data);
         $this->_resourceConfig->saveConfig('sendinblue/selected_list_data', trim($listResp['data']['id']), $this->_scopeTypeDefault, $this->_storeId);
-        //list id
-
-        $this->sendAllMailIDToSendin($listResp['data']['id']);
     }
 
 
@@ -400,7 +397,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     public function sendAllMailIDToSendin($listId)
     {
         $emailValue = $this->getSubscribeCustomer();
-        $baseUrl = $this->_storeManagerInterface->getStore()->getBaseUrl();
+        $mediaUrl = $this->_storeManagerInterface->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
         $apiKey = !empty($this->apiKey) ? $this->apiKey : $this->getDbData('api_key');
         if ($emailValue > 0 && !empty($apiKey)) {
             $this->updateDbData('import_old_user_status', 1);
@@ -408,7 +405,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
             $listIdVal = explode('|', $listId);
             $mailinObj = $this->createObjMailin($apiKey);
             $userDataInformation['key'] = $apiKey;
-            $userDataInformation['url'] = $baseUrl.'pub/media/sendinblue_csv/ImportSubUsersToSendinblue.csv';
+            $userDataInformation['url'] = $mediaUrl.'sendinblue_csv/ImportSubUsersToSendinblue.csv';
             $userDataInformation['listids'] = $listIdVal; // $list;
             $userDataInformation['notify_url'] = '';
             $responseValue = $mailinObj->importUsers($userDataInformation);
@@ -813,9 +810,9 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
             $userDataInformation = array();
             $listIdVal = explode('|', $listId);
             $mailinObj = $this->createObjMailin($apiKey);
-            $baseUrl = $this->_storeManagerInterface->getStore()->getBaseUrl();
+            $baseUrl = $this->_storeManagerInterface->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
             $userDataInformation['key'] = $apiKey;
-            $userDataInformation['url'] = $baseUrl.'pub/media/sendinblue_csv/ImportOldOrdersToSendinblue.csv';
+            $userDataInformation['url'] = $baseUrl.'sendinblue_csv/ImportOldOrdersToSendinblue.csv';
             $userDataInformation['listids'] = $listIdVal; // $list;
             $userDataInformation['notify_url'] = '';
             $responseValue = $mailinObj->importUsers($userDataInformation);
@@ -1118,11 +1115,11 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
         $sendinConfirmType = $this->getDbData('confirm_type');
         if ($sendinConfirmType === 'doubleoptin') {
             $listId = $this->getDbData('optin_list_id');
+            $updateDataInSib['DOUBLE_OPT-IN'] = 2;
         } else {
             $listId = $this->getDbData('selected_list_data');
         }
 
-        
         $apiKey = trim($this->getDbData('api_key'));
         if (!empty($apiKey)) {
             $mailin = $this->createObjMailin($apiKey);
@@ -1326,11 +1323,17 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
 
             $to = array($to => '');
             $from = array($senderEmail, $senderName);
+            $searchValue = "({{\s*doubleoptin\s*}})";
 
             $htmlContent = str_replace('{title}', $subject, $htmlContent);
             $htmlContent = str_replace('https://[DOUBLEOPTIN]', '{subscribe_url}', $htmlContent);
             $htmlContent = str_replace('http://[DOUBLEOPTIN]', '{subscribe_url}', $htmlContent);
+            $htmlContent = str_replace('https://{{doubleoptin}}', '{subscribe_url}', $htmlContent);
+            $htmlContent = str_replace('http://{{doubleoptin}}', '{subscribe_url}', $htmlContent);
+            $htmlContent = str_replace('https://{{ doubleoptin }}', '{subscribe_url}', $htmlContent);
+            $htmlContent = str_replace('http://{{ doubleoptin }}', '{subscribe_url}', $htmlContent);
             $htmlContent = str_replace('[DOUBLEOPTIN]', '{subscribe_url}', $htmlContent);
+            $htmlContent = preg_replace($searchValue, '{subscribe_url}', $htmlContent);
             $htmlContent = str_replace('{site_name}', $siteName, $htmlContent);
             $htmlContent = str_replace('{unsubscribe_url}', $pathResp, $htmlContent);
             $htmlContent = str_replace('{subscribe_url}', $pathResp, $htmlContent);

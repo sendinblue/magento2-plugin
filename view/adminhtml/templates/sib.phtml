@@ -96,7 +96,7 @@ $formKey = $block->getFormValue();
                     <div class="form-box">
                         <h2 class="heading"><img alt="" src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/logo_white.png'); ?>"><?php echo __('Prerequisites'); ?></h2>
                         <div class="form-box-content">
-                            <p class="sub-heading"><?php echo __('You should have a SendinBlue account. You can create a free account here : '); ?><a class="link_action" href="https://www.sendinblue.com?utm_source=magento_plugin&amp;utm_medium=plugin&amp;utm_campaign=module_link" style="color:#268CCD;" target="_blank">&nbsp;https://www.sendinblue.com</a><br></p>
+                            <p class="sub-heading"><?php echo __('You should have a SendinBlue account. You can create a free account here : '); ?><a class="link_action" href="https://app.sendinblue.com/account/register/?utm_source=magento_plugin&amp;utm_medium=plugin&amp;utm_campaign=module_link" style="color:#268CCD;" target="_blank">&nbsp;https://www.sendinblue.com</a><br></p>
                         </div>
                     </div>
                     <!-- Section Ends -->
@@ -254,7 +254,7 @@ $formKey = $block->getFormValue();
                                                                     <?php 
                                                                     if (!empty($camp['campaign_records'])) {
                                                                         foreach ($camp['campaign_records'] as $templateData) {
-                                                                            if ($templateData['templ_status'] === 'Active' && stristr($templateData['html_content'], 'DOUBLEOPTIN') === false) {
+                                                                            if ($templateData['templ_status'] === 'Active' && stristr($templateData['html_content'], 'doubleoptin') === false) {
                                                 
                                                                     ?>
         
@@ -295,7 +295,7 @@ $formKey = $block->getFormValue();
                                                             $doubleOptinTempId = $model->getDbData('doubleoptin_template_id');
                                                             if (!empty($camp['campaign_records'])) {
                                                                 foreach ($camp['campaign_records'] as $templateData) {
-                                                                    if ($templateData['templ_status'] === 'Active' && stristr($templateData['html_content'], 'DOUBLEOPTIN') == true) {
+                                                                    if ($templateData['templ_status'] === 'Active' && stristr($templateData['html_content'], 'doubleoptin') == true) {
                                                                         if (trim($templateData['id']) == trim($doubleOptinTempId)) { echo  'selected="selected"'; }
                                                             ?>
         
@@ -343,7 +343,7 @@ $formKey = $block->getFormValue();
                                                                          $optinTempDb = $model->getDbData('final_template_id');
                                                                     if (!empty($camp['campaign_records'])) {
                                                                         foreach ($camp['campaign_records'] as $templateData) {
-                                                                            if ($templateData['templ_status'] === 'Active' && stristr($templateData['html_content'], 'DOUBLEOPTIN') === false) {
+                                                                            if ($templateData['templ_status'] === 'Active' && stristr($templateData['html_content'], 'doubleoptin') === false) {
                                                                                 if (trim($templateData['id']) == trim($optinTempDb)) { echo  'selected="selected"'; }
                                                                     ?>
         
@@ -373,10 +373,8 @@ $formKey = $block->getFormValue();
                                     <td>
                                         <input name="update_tempvalue" type="hidden" value="update_tempvalue" />
                                         <input class="button submitForm2 btn-primary btn" name="submitForm2" type="submit" value="<?php echo __('Update'); ?>">&nbsp;
-                                        <?php if($model->getDbData('import_old_user_status') == 1) { ?>
 											<input name="import_function" type="hidden" value="import_function" />
                                             <input class="button btn-success btn" name="submitUpdateImport" type="submit" value="<?php echo __('Import Old Subscribers'); ?>">
-                                        <?php } ?>
                                     </td>
                                 </tr>
                                 <tr class="managesubscribeBlock">
