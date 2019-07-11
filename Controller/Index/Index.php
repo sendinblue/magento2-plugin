@@ -48,7 +48,7 @@ class Index extends \Magento\Framework\App\Action\Action
             $mailin = $this->_model->createObjMailin($apiKey);
 
             $data = array( "email" => $userEmail,
-                    "attributes" => array(),
+                    "attributes" => array("DOUBLE_OPT-IN"=>1),
                     "blacklisted" => 0,
                     "listid" => array($listId),
                     "listid_unlink" => array($optinListId),
