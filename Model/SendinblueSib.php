@@ -1227,6 +1227,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
             $lang = $this->getDbData('sendin_config_lang');
 
             $path = $this->_blocktemp->getViewFileUrl('Sendinblue_Sendinblue::email_temp/'.strtolower($lang).'/'.$tempName.'.html');
+            $path = str_replace('_view','Magento/backend', $path);
             $bodyContent = file_get_contents($path);
             if (!empty($paramVal)) {
                 foreach($paramVal as $key=>$replaceVal) {

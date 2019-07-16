@@ -460,7 +460,9 @@ class Ajax extends \Magento\Backend\App\Action
                 } else {
                     $imgSendinBlue = '<img src="'.$blockObj->getViewFileUrl('Sendinblue_Sendinblue::images/disabled.gif').'" id="ajax_contact_status_'.$i.'" title="'.$title2.'" >';
                 }
-
+                $imgMagento = str_replace('_view','Magento/backend', $imgMagento);
+                $imgSendinBlue = str_replace('_view','Magento/backend', $imgSendinBlue);
+                $imgSms = str_replace('_view','Magento/backend', $imgSms);
                 $message .= '<tr  class="even pointer"><td class="a-left">'.$email.'</td><td class="a-left">'.$client.'</td><td class="a-left">'.$phone.'</td><td class="a-left">'.$imgMagento.'</td>
                     <td class="a-left"><a status="'.$showStatus.'" email="'.$email.'" class="ajax_contacts_href" href="javascript:void(0)">
             '.$imgSendinBlue.'</a></td><td class="a-left last">
