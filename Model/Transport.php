@@ -13,7 +13,10 @@ use Zend\Mail\Transport\Smtp;
 class Transport
 {
     /** @var MessageInterface */
-    protected $_message;
+	protected $_message;
+
+	protected $_scopeConfig;
+	
     
     /** @var Smtp|\Zend_Mail_Transport_Smtp **/
     protected $transport;
@@ -25,8 +28,9 @@ class Transport
      * @throws \InvalidArgumentException
      */
     public function __construct(MessageInterface $message, ScopeConfigInterface $scopeConfig ){
-		$this->_message = $message;
-		
+			$this->_message = $message;
+			$this->_scopeConfig = $scopeConfig;
+
 		$relaySib = $scopeConfig->getValue('sendinblue/relay_data_status', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
 		if ($relaySib == 'enabled') {
 			$smtpHost = "smtp-relay.sendinblue.com";
@@ -56,8 +60,8 @@ class Transport
 					],
 				]));
 			}
-		}  
-    }
+		} 
+	}
  
     /**
      * Send a mail using this transport
@@ -66,17 +70,23 @@ class Transport
      */
     public function sendMessage()
     {
-		if(null !== $this->transport){
+		if ($this->_scopeConfig->isSetFlag('system/smtp/disable',\Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
+				return false;
+		}
+		if(null !== $this->transport) {
 			try {
 				if ($this->_message instanceof \Zend_mail) {
 					$this->transport->send($this->_message);
 				} elseif ($this->_message instanceof MessageInterface) {
-					$this->transport->send(Message::fromString($this->_message->getRawMessage()));
+					$zend_mail = Message::fromString($this->_message->getRawMessage());
+					$subject = $zend_mail->getSubject();
+					$zend_mail->setSubject(htmlspecialchars_decode((string)$subject, ENT_QUOTES));
+					$this->transport->send($zend_mail);
 				}
 			} catch (\Exception $e) {
 				throw new \Magento\Framework\Exception\MailException(new \Magento\Framework\Phrase($e->getMessage()), $e);
 			}
-        }
+        } 
     }
     
     /**

@@ -8,6 +8,9 @@ $apiKeyStatus = !empty($model->getDbData('api_key_status'))
  ? $model->getDbData('api_key_status') : '';
 
 $formKey = $block->getFormValue();
+$newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:16px !important; display:inline !important;padding: 0 2px 0 0 !important;vertical-align: top !important">
+<path fill="#0091fe" d="M473.722 127.464c-18.027-31.901-48.272-55.215-83.865-64.647a142.257 142.257 0 0 0-22.471-3.885C342.065 22.06 300.026 0 255.08 0c-44.944 0-86.983 22.06-112.304 58.932C98.157 63.142 58.4 88.68 36.24 127.365a139.082 139.082 0 0 0-5.316 127.402 139.674 139.674 0 0 0 5.316 127.104c18.053 31.879 48.287 55.184 83.865 64.647a130.245 130.245 0 0 0 22.973 3.885c25.261 36.958 67.322 59.087 112.304 59.087 44.983 0 87.043-22.13 112.305-59.087 44.638-4.161 84.414-29.71 106.536-68.433a138.588 138.588 0 0 0 5.317-127.402 139.379 139.379 0 0 0-5.818-127.104zm-33.861 20.14c10.8 18.89 14.88 40.769 11.6 62.186a140.27 140.27 0 0 0-24.015-17.568c-31.777-18.423-69.787-23.497-105.428-14.074-21.674 5.722-41.612 16.51-58.107 31.442-6.093-38.506 12.271-76.783 46.404-96.722 21.403-12.61 47.09-16.21 71.235-9.981 24.815 6.533 45.86 22.673 58.31 44.717zM254.813 44.955c21.153.117 41.612 7.52 57.892 20.948a140.215 140.215 0 0 0-27.272 12.04c-50.843 30.193-76.605 89.302-63.996 146.832-35.486-14.33-58.666-48.648-58.581-86.729-.22-50.807 40.858-92.26 91.957-92.797v-.294zM71.075 149.893c10.763-18.148 27.595-32.249 47.752-40.003a134.308 134.308 0 0 0-3.455 29.342c-.174 58.952 39.193 111.274 97.433 129.495-10.376 8.36-22.506 14.466-35.56 17.898-24.037 6.26-49.683 2.91-71.118-9.291-45.903-26.087-61.706-82.724-35.56-127.441h.508zm-.458 211.901c-10.82-18.85-14.87-40.716-11.503-62.094a144.971 144.971 0 0 0 23.922 17.57c21.096 12.2 45.136 18.646 69.627 18.668a142.451 142.451 0 0 0 35.831-4.692c21.69-5.7 41.64-16.493 58.125-31.446 6.072 38.511-12.239 76.793-46.316 96.835-21.417 12.59-47.102 16.188-71.256 9.983-25.019-6.331-46.312-22.417-58.939-44.524l.51-.3zm185.12 102.546c-21.194-.131-41.677-7.601-57.917-21.121a133.872 133.872 0 0 0 27.284-11.832c50.865-30.16 76.638-89.204 64.024-146.672 41.267 16.713 65.055 59.88 56.975 103.392-8.08 43.51-45.809 75.421-90.366 76.428v-.195zm174.56-104.781c-10.365 18.23-26.73 32.368-46.35 40.041a132.315 132.315 0 0 0 3.353-29.37c.138-58.999-38.063-111.355-94.575-129.62a91.453 91.453 0 0 1 34.516-17.915c23.401-6.086 48.285-2.557 69.033 9.79 44.263 26.268 59.358 82.778 34.024 127.368v-.294z"></path>
+</svg>';
 ?>
 <!DOCTYPE html>
 <html>
@@ -35,7 +38,7 @@ $formKey = $block->getFormValue();
             <!-- Header start -->
             <div class="header">
             <a href="#" class="logo"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/sendinblue.png'); ?>" /></a>
-            <h3><?php echo __('SendinBlue : THE all-in-one plugin for your marketing and transactional emails.'); ?></h3>
+            <h3><?php echo __('Sendinblue : THE all-in-one plugin for your marketing and transactional emails.'); ?></h3>
             <div class="clearfix"></div>
 
             </div>
@@ -43,7 +46,7 @@ $formKey = $block->getFormValue();
             
             
             <ul class="main-tabs">
-                <li><a data-id="#about-sendinblue" id="about-sendinblue" href="javascript:void(0)" class="active"><?php echo __('About SendinBlue'); ?></a></li>
+                <li><a data-id="#about-sendinblue" id="about-sendinblue" href="javascript:void(0)" class="active"><?php echo __('About Sendinblue'); ?></a></li>
                 <li><a data-id="#subscribe-manager" id="subscribe-manager" href="javascript:void(0)"><?php echo __('Subscribe Manager'); ?></a></li>
                 <li><a data-id="#code-tracking" id="code-tracking" href="javascript:void(0)"><?php echo __('Code Tracking'); ?></a></li>
                 <li><a data-id="#transactional-email-sms-management" id="transactional-email-sms-management" href="javascript:void(0)"><?php echo __('Transactional Emails and SMS Management'); ?></a></li>
@@ -58,26 +61,26 @@ $formKey = $block->getFormValue();
                 
                     <!-- Section Start -->
                     <div class="form-box">
-                        <h2 class="heading"><img alt="" src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/logo_white.png'); ?>">SendinBlue</h2>
+                        <h2 class="heading"><?php echo $newIconSvg; ?>Sendinblue</h2>
                         <div class="form-box-content">
                         <div class="contact-box">
-                            <h2><?php echo __('Contact SendinBlue Team'); ?></h2>
+                            <h2><?php echo __('Contact Sendinblue Team'); ?></h2>
                             <div class="clearfix"></div>
                             <p>Contact us :<br>
                             <br>
-                            Email : <a href="mailto:contact@sendinblue.com" style="color:#268CCD;">contact@sendinblue.com</a>
+                            Email : <a href="mailto:contact@sendinblue.com" style="color:#044A75;">contact@sendinblue.com</a>
                             <p style="padding-top:20px;"><b><?php echo __('For further informations, please visit our website:'); ?></b><br>
-                            <a href="https://www.sendinblue.com?utm_source=magento_plugin&amp;utm_medium=plugin&amp;utm_campaign=module_link" style="color:#268CCD;" target="_blank">https://www.sendinblue.com</a></p>
+                            <a href="https://www.sendinblue.com?utm_source=magento_plugin&amp;utm_medium=plugin&amp;utm_campaign=module_link" style="color:#044A75;" target="_blank">https://www.sendinblue.com</a></p>
                         </div>
-                        <p class="sub-heading"><?php echo __('With the SendinBlue plugin, you can find everything you need to easily and efficiently send your email &amp; SMS campaigns to your prospects and customers.'); ?></p>
+                        <p class="sub-heading"><?php echo __('With the Sendinblue plugin, you can find everything you need to easily and efficiently send your email &amp; SMS campaigns to your prospects and customers.'); ?></p>
                         <ul style="margin-left: 20px;">
-                            <li><?php echo __('Synchronize your subscribers with SendinBlue (subscribed contacts)'); ?></li>
+                            <li><?php echo __('Synchronize your subscribers with Sendinblue (subscribed contacts)'); ?></li>
                             <li><?php echo __('Easily create good looking emailings'); ?></li>
                             <li><?php echo __('Schedule your campaigns'); ?></li>
                             <li><?php echo __('Track your results and optimize'); ?></li>
                             <li><?php echo __('Monitor your transactional emails (purchase confirmation, password reset, etc) with a better deliverability and real-time analytics'); ?></li>
                         </ul>
-                        <p class="sub-heading"><?php echo __('Why should you use SendinBlue ?'); ?></p>
+                        <p class="sub-heading"><?php echo __('Why should you use Sendinblue ?'); ?></p>
                         <ul style="margin-left: 20px;">
                             <li><?php echo __('Optimized deliverability'); ?></li>
                             <li><?php echo __('Unbeatable pricing &ndash; best value in the industry'); ?></li>
@@ -94,9 +97,9 @@ $formKey = $block->getFormValue();
                     
                     <!-- Section Start -->
                     <div class="form-box">
-                        <h2 class="heading"><img alt="" src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/logo_white.png'); ?>"><?php echo __('Prerequisites'); ?></h2>
+                        <h2 class="heading"><?php echo $newIconSvg; ?><?php echo __('Prerequisites'); ?></h2>
                         <div class="form-box-content">
-                            <p class="sub-heading"><?php echo __('You should have a SendinBlue account. You can create a free account here : '); ?><a class="link_action" href="https://app.sendinblue.com/account/register/?utm_source=magento_plugin&amp;utm_medium=plugin&amp;utm_campaign=module_link" style="color:#268CCD;" target="_blank">&nbsp;https://www.sendinblue.com</a><br></p>
+                            <p class="sub-heading"><?php echo __('You should have a Sendinblue account. You can create a free account here : '); ?><a class="link_action" href="https://app.sendinblue.com/account/register/?utm_source=magento_plugin&amp;utm_medium=plugin&amp;utm_campaign=module_link" style="color:#044A75;" target="_blank">&nbsp;https://www.sendinblue.com</a><br></p>
                         </div>
                     </div>
                     <!-- Section Ends -->
@@ -109,10 +112,10 @@ $formKey = $block->getFormValue();
                     <input name="ajaxcontentUrl" type="hidden" id="ajaxcontentUrl" value="<?php echo $this->getUrl("sendinblue/index/ajax");  ?>" />
                     <input name="file_url" id="file_url" type="hidden" value="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue'); ?>">
                     <input type="hidden" name="pagenumber" id="pagenumber" value="1" /> 
-                            <h2 class="heading"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/logo_white.png'); ?>"><?php echo __('Settings'); ?></h2>
+                            <h2 class="heading"><?php echo $newIconSvg; ?><?php echo __('Settings'); ?></h2>
                             <div class="form-box-content">
                             <div class="form-row">
-                            <div class="form-row-title"><?php echo __('Activate the SendinBlue module'); ?></div>
+                            <div class="form-row-title"><?php echo __('Activate the Sendinblue module'); ?></div>
                             <?php if ($model->getDbData('api_key_status') == 1) {
                                 $str = 'style="display:block;"';
                                 } else {
@@ -131,7 +134,7 @@ $formKey = $block->getFormValue();
                                 <div class="form-row-title key"><?php echo __('API key v2'); ?> </div>
                                 <div class="form-element-box key">
                                     <input id="apikeys" name="apikey" type="text" value="<?php echo $apiKey; ?>" class="pull-left margin-right-xxs">
-                                    <div class="toolTip tooltip-form pull-left" title="<?php echo __("Please enter your API key from your SendinBlue account and if you don't have it yet, please go to www.sendinblue.com and subscribe. You can then get the API key from https://my.sendinblue.com/advanced/apikey"); ?>"></div>
+                                    <div class="toolTip tooltip-form pull-left" title="<?php echo __("Please enter your API key from your Sendinblue account and if you don't have it yet, please go to www.sendinblue.com and subscribe. You can then get the API key from https://my.sendinblue.com/advanced/apikey"); ?>"></div>
                                 </div>
                             </div>
                             <div class="clearfix"></div>
@@ -165,14 +168,14 @@ $formKey = $block->getFormValue();
                     </style>
                     <?php } ?>
                     
-                    <h2 class="heading"><img alt="" src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/logo_white.png'); ?>"><?php echo __('Activate SendinBlue to manage subscribers'); ?></h2>
+                    <h2 class="heading"><?php echo $newIconSvg; ?><?php echo __('Activate Sendinblue to manage subscribers'); ?></h2>
                     
                     <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#subscribe-manager" method="post">
                     <input name="form_key" id="form_key" type="hidden" value="<?php echo $formKey ?>" />
                         <table cellpadding="0" cellspacing="0" class="table tableblock hidetableblock form-data" width="100%">
                             <tbody>
                                 <tr>
-                                    <td style="width:250px"><label><?php echo __('Activate SendinBlue to manage subscribers'); ?></label></td>
+                                    <td style="width:250px"><label><?php echo __('Activate Sendinblue to manage subscribers'); ?></label></td>
                                     <td class="ver_5">
                                     <label class="input-label"><input class="managesubscribe" <?php if($model->getDbData('subscribe_setting') == 1) { echo "checked"; } ?> id="managesubscribe" name="managesubscribe" type="radio" value="1"> Yes </label>
                                     <label class="input-label"><input class="managesubscribe" <?php if($model->getDbData('subscribe_setting') == 0) { echo "checked"; } ?> id="managesubscribe" name="managesubscribe" type="radio" value="0"> No </label>
@@ -205,7 +208,7 @@ $formKey = $block->getFormValue();
                                                 </option>
                                                 <?php } ?>
                                             </select>
-                                            <span class="toolTip listData" title="<?php echo __('Select the contact list where you want to save the contacts of your site Magento. By default, we have created a list Magento in your SendinBlue account and we have selected it');?>">&nbsp;</span>
+                                            <span class="toolTip listData" title="<?php echo __('Select the contact list where you want to save the contacts of your site Magento. By default, we have created a list Magento in your Sendinblue account and we have selected it');?>">&nbsp;</span>
                                         </div>
                                     </td>
                                 </tr>
@@ -262,7 +265,7 @@ $formKey = $block->getFormValue();
                                                                         <?php echo $templateData['campaign_name']; ?>
                                                                     </option>
                                                                     <?php }}} ?>
-                                                                </select><span class="toolTip" title="<?php echo __('Select a SendinBlue template that will be sent personalized for each contact that subscribes to your newsletter'); ?> "></span>
+                                                                </select><span class="toolTip" title="<?php echo __('Select a Sendinblue template that will be sent personalized for each contact that subscribes to your newsletter'); ?> "></span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -304,7 +307,7 @@ $formKey = $block->getFormValue();
                                                             </option>
                                                             <?php }}} ?>
                                                             
-                                                        </select><span class="toolTip" title="<?php echo __('Select a SendinBlue template that will be sent personalized for each contact that subscribes to your newsletter'); ?>"></span>
+                                                        </select><span class="toolTip" title="<?php echo __('Select a Sendinblue template that will be sent personalized for each contact that subscribes to your newsletter'); ?>"></span>
                                                     </div>
         
                                                     <div class="clearfix"></div>
@@ -352,7 +355,7 @@ $formKey = $block->getFormValue();
                                                                     </option>
                                                                     <?php }}} ?>
                                                                         
-                                                                    </select><span class="toolTip" title="<?php echo __('Select a SendinBlue template that will be sent personalized for each contact that subscribes to your newsletter'); ?>"></span>
+                                                                    </select><span class="toolTip" title="<?php echo __('Select a Sendinblue template that will be sent personalized for each contact that subscribes to your newsletter'); ?>"></span>
                                                                 </div>
                                                             </div>
                                                             <div class="clearfix"></div>
@@ -380,7 +383,7 @@ $formKey = $block->getFormValue();
                                 <tr class="managesubscribeBlock">
                                     <td>&nbsp;</td>
                                     <td>
-                                        <?php echo __('To synchronize the emails of your customers from SendinBlue platform to your e-commerce website, you should run '); ?><a href="<?php echo $this->getUrl("sendinblue/index/sync");?>" style="color: #000000; outline: 0 none; text-decoration: none;" target="_blank"><?php echo __('this link'); ?> </a><?php echo __('each day'); ?>
+                                        <?php echo __('To synchronize the emails of your customers from Sendinblue platform to your e-commerce website, you should run '); ?><a href="<?php echo $this->getUrl("sendinblue/index/sync");?>" style="color: #000000; outline: 0 none; text-decoration: none;" target="_blank"><?php echo __('this link'); ?> </a><?php echo __('each day'); ?>
                                     </td>
                                 </tr>       
                                 </tr>
@@ -397,7 +400,7 @@ $formKey = $block->getFormValue();
                 
                     <!-- Section Start -->
                     <div class="form-box">
-                    <h2 class="heading"><img alt="" src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/logo_white.png'); ?>"><?php echo __('Code tracking'); ?></h2>
+                    <h2 class="heading"><?php echo $newIconSvg; ?><?php echo __('Code tracking'); ?></h2>
                      <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#code-tracking" id="ordtrack" method="post" name="ordtrack">
                      <input name="form_key" id="form_key" type="hidden" value="<?php echo $formKey ?>" />
                     <input name="ajaxcontentUrl" type="hidden" id="ajaxcontentUrl" value="<?php echo $this->getUrl("sendinblue/index/ajax");  ?>" />
@@ -408,7 +411,7 @@ $formKey = $block->getFormValue();
                                     <span class="ver_5">
                                     <label class="input-label"><input <?php if($model->getDbData('ord_track_status') == 1) { echo "checked"; } ?> class="ordertracking ord_track_cls radio_nospaceing" id="yesradio" name="ord_track_status" type="radio" value="1"> Yes </label>
                                     <label class="input-label"><input <?php if($model->getDbData('ord_track_status') == 0) { echo "checked"; } ?> class="ordertracking ord_track_cls radio_spaceing2" id="noradio" name="ord_track_status" type="radio" value="0"> No</label> 
-                                    <span class="toolTip tooltip-radio" title="<?php echo __('This feature will allow you to transfer all your customers orders from Magento into SendinBlue to implement your email marketing strategy.'); ?>"></span>
+                                    <span class="toolTip tooltip-radio" title="<?php echo __('This feature will allow you to transfer all your customers orders from Magento into Sendinblue to implement your email marketing strategy.'); ?>"></span>
                                     </span>
                                     <label class="input-label"><input class="button btn-primary btn btn-xs ord_track_cls_btn" type="button" value="<?php echo __('Update');?>"></label>
                                     <div class="clearfix"></div>
@@ -445,14 +448,14 @@ $formKey = $block->getFormValue();
                 
                 <!-- Section Start -->
                 <div class="form-box">
-                <h2 class="heading"><img alt="" src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/logo_white.png'); ?>"><?php echo __('Activate SendinBlue SMTP for your transactional emails'); ?></h2>
+                <h2 class="heading"><?php echo $newIconSvg; ?><?php echo __('Activate Sendinblue SMTP for your transactional emails'); ?></h2>
                 <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#transactional-email-sms-management" method="post">
                 <input name="form_key" id="form_key" type="hidden" value="<?php echo $formKey ?>" />
                     <table cellpadding="0" cellspacing="0" class="table tableblock hidetableblock form-data" width="100%">
                             <tr>
                                     <td>
                                         
-                                        <label><?php echo __('Activate SendinBlue SMTP for your transactional emails'); ?></label> 
+                                        <label><?php echo __('Activate Sendinblue SMTP for your transactional emails'); ?></label> 
                                         <span class="ver_5">
                                         <label class="input-label"><input <?php if($model->getDbData('api_smtp_status') == 1) { echo "checked"; } ?> class="smtptestclick radio_nospaceing" id="yessmtp" name="smtpservices" type="radio" value="1">Yes </label>
                                         <label class="input-label"><input class="smtptestclick radio_spaceing2" <?php if($model->getDbData('api_smtp_status') == 0) { echo "checked"; } ?> id="nosmtp" name="smtpservices" type="radio" value="0">No </label>
@@ -485,7 +488,7 @@ $formKey = $block->getFormValue();
                 <!-- Section Start -->
                 <div class="form-box">
                     
-                    <h2 class="heading"><img alt="" src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/logo_white.png'); ?>"><?php echo __('Manage SMS'); ?></h2>
+                    <h2 class="heading"><?php echo $newIconSvg; ?><?php echo __('Manage SMS'); ?></h2>
                         <table cellpadding="0" cellspacing="0" class="table form-data tableblock hidetableblock" style="margin-bottom:15px;" width="100%">
                         <tbody>
                             <tr>
@@ -939,7 +942,7 @@ $formKey = $block->getFormValue();
                             
                                 <!-- Section Start -->
                                 <div class="form-box">
-                                <h2 class="heading"><img alt="" src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/logo_white.png'); ?>"><?php echo __('Contact List'); ?></h2>
+                                <h2 class="heading"><?php echo $newIconSvg; ?><?php echo __('Contact List'); ?></h2>
                                  <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#contact-list" id="ordtrack" method="post" name="ordtrack">
                                  <input name="form_key" id="form_key" type="hidden" value="<?php echo $formKey ?>" />
                                 <input name="ajaxcontentUrl" type="hidden" id="ajaxcontentUrl" value="<?php echo $this->getUrl("sendinblue/index/ajax");  ?>" />
@@ -966,8 +969,8 @@ $formKey = $block->getFormValue();
                                                             <th class="no-link"><span class="nobr"><?php echo __('clients'); ?></span></th>
                                                             <th class="no-link"><span class="nobr"><?php echo __('SMS'); ?></span></th>
                                                             <th class="no-link"><span class="nobr"><?php echo __('Newsletter Magento Status'); ?></span></th>
-                                                            <th class="no-link"><span class="nobr"><?php echo __('Newsletter SendinBlue Status'); ?><span title="<?php echo __('Click on the icon to subscribe / unsubscribe the contact from SendinBlue and Magento.'); ?>" class="toolTip">&nbsp;</span></span></th>
-                                                            <th class="no-link last"><span class="nobr"><?php echo __('SMS SendinBlue Status'); ?><span title="<?php echo __('Click on the icon to subscribe / unsubscribe the sms from SendinBlue and Magento.'); ?>" class="toolTip">&nbsp;</span></span></th>
+                                                            <th class="no-link"><span class="nobr"><?php echo __('Newsletter Sendinblue Status'); ?><span title="<?php echo __('Click on the icon to subscribe / unsubscribe the contact from Sendinblue and Magento.'); ?>" class="toolTip">&nbsp;</span></span></th>
+                                                            <th class="no-link last"><span class="nobr"><?php echo __('SMS Sendinblue Status'); ?><span title="<?php echo __('Click on the icon to subscribe / unsubscribe the sms from Sendinblue and Magento.'); ?>" class="toolTip">&nbsp;</span></span></th>
                                                          </tr>
                                                       </thead>
                                                       <tbody class='midleft'>

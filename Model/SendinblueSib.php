@@ -87,9 +87,9 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
             $folderId = $result['key'];
             $existList = $result['list_name'];
         }
-        //Create the partner's name i.e. Shopify on SendinBlue platform
+        //Create the partner's name i.e. Shopify on Sendinblue platform
         $this->partnerMagento();
-        // create list in SendinBlue
+        // create list in Sendinblue
         $this->createNewList($folderId, $existList);
     }
 
@@ -106,7 +106,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-    * Description: Creates a list by the name "Shopify" on user's SendinBlue account.
+    * Description: Creates a list by the name "Shopify" on user's Sendinblue account.
     *
     * @author: Amar Pandey <amarpandey@sendinblue.com>
     * @param: useremail, doubleoptinUrl, storeId ,shoplang
@@ -222,7 +222,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
 
     /**
     * Description: reate Normal, Transactional, Calculated and Global attributes and their values
-    * on SendinBlue platform. This is necessary for the Shopify to add subscriber's details.
+    * on Sendinblue platform. This is necessary for the Shopify to add subscriber's details.
     *
     * @author: Amar Pandey <amarpandey@sendinblue.com>
     * @param: no
@@ -318,7 +318,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-    * Description: API config value from SendinBlue with date format.
+    * Description: API config value from Sendinblue with date format.
     *
     * @author: Amar Pandey <amarpandey@sendinblue.com>
     * @param: storeID
@@ -387,7 +387,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
 
     /**
     * Description: Method is used to send all the subscribers from Shopify to
-    * SendinBlue for adding / updating purpose.
+    * Sendinblue for adding / updating purpose.
     *
     * @author: Amar Pandey <amarpandey@sendinblue.com>
     * @param: Sib listId
@@ -419,7 +419,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-    * Description: Fetches all the subscribers of Shopify and adds them to the SendinBlue database.
+    * Description: Fetches all the subscribers of Shopify and adds them to the Sendinblue database.
     *
     * @author: Amar Pandey <amarpandey@sendinblue.com>
     * @param: get user detail
@@ -638,7 +638,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-    * Description: Show  SMS  credit from SendinBlue.
+    * Description: Show  SMS  credit from Sendinblue.
     *
     * @author: Amar Pandey <amarpandey@sendinblue.com>
     * @param: ApiKey
@@ -950,7 +950,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-    * Description: Send SMS from SendinBlue.
+    * Description: Send SMS from Sendinblue.
     * Get Param sender and msg fields.
     */
     public function sendSmsApi($dataSms)
@@ -1103,7 +1103,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-    * Description: Send single user in SendinBlue.
+    * Description: Send single user in Sendinblue.
     *
     */
     public function subscribeByruntime($userEmail, $updateDataInSib)
@@ -1137,7 +1137,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-    * Description: Checks whether the SendinBlue API key and the SendinBlue subscription form is enabled
+    * Description: Checks whether the Sendinblue API key and the Sendinblue subscription form is enabled
     * and returns the true|false accordingly.
     */
     public function syncSetting()
@@ -1152,7 +1152,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-    * Description: Send single user in SendinBlue.
+    * Description: Send single user in Sendinblue.
     *
     */
     public function unsubscribeByruntime($userEmail)
@@ -1227,6 +1227,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
             $lang = $this->getDbData('sendin_config_lang');
 
             $path = $this->_blocktemp->getViewFileUrl('Sendinblue_Sendinblue::email_temp/'.strtolower($lang).'/'.$tempName.'.html');
+            $path = str_replace('_view','Magento/backend', $path);
             $bodyContent = file_get_contents($path);
             if (!empty($paramVal)) {
                 foreach($paramVal as $key=>$replaceVal) {
@@ -1251,7 +1252,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     {
         $notifyEmail = $this->getDbData('notify_email');
         $tempName = 'sendin_notification';
-        $title = __('[SendinBlue] Notification : Credits SMS');
+        $title = __('[Sendinblue] Notification : Credits SMS');
         $siteName = $this->_storeManagerInterface->getStore()->getName();
         $paramVal = array('{present_credit}' => $remainingSms, '{site_name}' => $siteName);
         $this->smtpSendMail($notifyEmail, $title, $tempName, $paramVal);
