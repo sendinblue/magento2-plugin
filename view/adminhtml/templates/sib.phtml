@@ -48,7 +48,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
             <ul class="main-tabs">
                 <li><a data-id="#about-sendinblue" id="about-sendinblue" href="javascript:void(0)" class="active"><?php echo __('About Sendinblue'); ?></a></li>
                 <li><a data-id="#subscribe-manager" id="subscribe-manager" href="javascript:void(0)"><?php echo __('Subscribe Manager'); ?></a></li>
-                <li><a data-id="#code-tracking" id="code-tracking" href="javascript:void(0)"><?php echo __('Code Tracking'); ?></a></li>
+                <li><a data-id="#code-tracking" id="code-tracking" href="javascript:void(0)"><?php echo __('Code tracking'); ?></a></li>
                 <li><a data-id="#transactional-email-sms-management" id="transactional-email-sms-management" href="javascript:void(0)"><?php echo __('Transactional Emails and SMS Management'); ?></a></li>
                 <li><a data-id="#contact-list" id="contact-list" href="javascript:void(0)"><?php echo __('Contact List'); ?></a></li>
             </ul>
@@ -66,7 +66,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                         <div class="contact-box">
                             <h2><?php echo __('Contact Sendinblue Team'); ?></h2>
                             <div class="clearfix"></div>
-                            <p>Contact us :<br>
+                            <p><?php echo __('Contact us:'); ?><br>
                             <br>
                             Email : <a href="mailto:contact@sendinblue.com" style="color:#044A75;">contact@sendinblue.com</a>
                             <p style="padding-top:20px;"><b><?php echo __('For further informations, please visit our website:'); ?></b><br>
@@ -123,8 +123,8 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                 } 
                             ?>
                             <div class="form-element-box">
-                                <label><input <?php if($model->getDbData('api_key_status') == 1) { echo 'checked = "checked"'; } ?> class="keyyes" id="y" name="status" type="radio" value="1"> Yes</label>
-                                <label><input <?php if($model->getDbData('api_key_status') == 0) { echo 'checked = "checked"'; } ?> class="keyyes" id="n" name="status" type="radio" value="0"> No</label>
+                                <label><input <?php if($model->getDbData('api_key_status') == 1) { echo 'checked = "checked"'; } ?> class="keyyes" id="y" name="status" type="radio" value="1"> <?php echo __('Yes'); ?></label>
+                                <label><input <?php if($model->getDbData('api_key_status') == 0) { echo 'checked = "checked"'; } ?> class="keyyes" id="n" name="status" type="radio" value="0"> <?php echo __('No'); ?></label>
                             </div>
                             <div class="clearfix"></div>
                             </div>
@@ -144,7 +144,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                     <label>&nbsp;</label>
                                 </div>
                                 <div class="form-element-box">
-                                    <input class="button btn-primary btn" name="submitUpdate" type="submit" value="Update">
+                                    <input class="button btn-primary btn" name="submitUpdate" type="submit" value="<?php echo __('Update');?>">
                                 </div>
                                 <div class="clearfix"></div>
                             </div>
@@ -177,8 +177,8 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                 <tr>
                                     <td style="width:250px"><label><?php echo __('Activate Sendinblue to manage subscribers'); ?></label></td>
                                     <td class="ver_5">
-                                    <label class="input-label"><input class="managesubscribe" <?php if($model->getDbData('subscribe_setting') == 1) { echo "checked"; } ?> id="managesubscribe" name="managesubscribe" type="radio" value="1"> Yes </label>
-                                    <label class="input-label"><input class="managesubscribe" <?php if($model->getDbData('subscribe_setting') == 0) { echo "checked"; } ?> id="managesubscribe" name="managesubscribe" type="radio" value="0"> No </label>
+                                    <label class="input-label"><input class="managesubscribe" <?php if($model->getDbData('subscribe_setting') == 1) { echo "checked"; } ?> id="managesubscribe" name="managesubscribe" type="radio" value="1"> <?php echo __('Yes'); ?> </label>
+                                    <label class="input-label"><input class="managesubscribe" <?php if($model->getDbData('subscribe_setting') == 0) { echo "checked"; } ?> id="managesubscribe" name="managesubscribe" type="radio" value="0"> <?php echo __('No'); ?> </label>
                                     <label class="input-label"><input class="button btn-primary btn btn-xs managesubscribecls" type="button" value="<?php echo __('Update');?>"></label>
                                     <div class="loading-ajax" style="display: none; width: auto;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>
                                     </td>
@@ -329,7 +329,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                                     <div class="form-group clearfix" id="doubleoptin-final-confirmation-area">
                                                         <div style="float:left;">
                                                             <input class="openCollapse" <?php if($model->getDbData('final_confirm_email') == 'yes') { echo "checked"; } ?> id="final_confirm_email" name="final_confirm_email" type="checkbox" value="yes"> 
-                                                            <a aria-controls="doubleoptin-final-confirm" aria-expanded="false" data-toggle="collapse" href="#doubleoptin-final-confirm" style="color: #555;font-weight: bold;">Send a final confirmation email</a>
+                                                            <a aria-controls="doubleoptin-final-confirm" aria-expanded="false" data-toggle="collapse" href="#doubleoptin-final-confirm" style="color: #555;font-weight: bold;"><?php echo __('Send a final confirmation email'); ?></a>
                                                         </div>
                                                         <div class="clearfix"></div>
                                                         <div class="collapse" id="doubleoptin-final-confirm" style="padding-left: 10px;">
@@ -409,8 +409,8 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                 <tr>
                                     <td><label><?php echo __('Do you want to install a tracking code when validating an order'); ?></label> 
                                     <span class="ver_5">
-                                    <label class="input-label"><input <?php if($model->getDbData('ord_track_status') == 1) { echo "checked"; } ?> class="ordertracking ord_track_cls radio_nospaceing" id="yesradio" name="ord_track_status" type="radio" value="1"> Yes </label>
-                                    <label class="input-label"><input <?php if($model->getDbData('ord_track_status') == 0) { echo "checked"; } ?> class="ordertracking ord_track_cls radio_spaceing2" id="noradio" name="ord_track_status" type="radio" value="0"> No</label> 
+                                    <label class="input-label"><input <?php if($model->getDbData('ord_track_status') == 1) { echo "checked"; } ?> class="ordertracking ord_track_cls radio_nospaceing" id="yesradio" name="ord_track_status" type="radio" value="1"> <?php echo __('Yes'); ?> </label>
+                                    <label class="input-label"><input <?php if($model->getDbData('ord_track_status') == 0) { echo "checked"; } ?> class="ordertracking ord_track_cls radio_spaceing2" id="noradio" name="ord_track_status" type="radio" value="0"> <?php echo __('No'); ?></label> 
                                     <span class="toolTip tooltip-radio" title="<?php echo __('This feature will allow you to transfer all your customers orders from Magento into Sendinblue to implement your email marketing strategy.'); ?>"></span>
                                     </span>
                                     <label class="input-label"><input class="button btn-primary btn btn-xs ord_track_cls_btn" type="button" value="<?php echo __('Update');?>"></label>
@@ -457,8 +457,8 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                         
                                         <label><?php echo __('Activate Sendinblue SMTP for your transactional emails'); ?></label> 
                                         <span class="ver_5">
-                                        <label class="input-label"><input <?php if($model->getDbData('api_smtp_status') == 1) { echo "checked"; } ?> class="smtptestclick radio_nospaceing" id="yessmtp" name="smtpservices" type="radio" value="1">Yes </label>
-                                        <label class="input-label"><input class="smtptestclick radio_spaceing2" <?php if($model->getDbData('api_smtp_status') == 0) { echo "checked"; } ?> id="nosmtp" name="smtpservices" type="radio" value="0">No </label>
+                                        <label class="input-label"><input <?php if($model->getDbData('api_smtp_status') == 1) { echo "checked"; } ?> class="smtptestclick radio_nospaceing" id="yessmtp" name="smtpservices" type="radio" value="1"><?php echo __('Yes'); ?> </label>
+                                        <label class="input-label"><input class="smtptestclick radio_spaceing2" <?php if($model->getDbData('api_smtp_status') == 0) { echo "checked"; } ?> id="nosmtp" name="smtpservices" type="radio" value="0"><?php echo __('No'); ?> </label>
                                         <span class="toolTip tooltip-radio" title="<?php echo __('Transactional email is an expected email because it is triggered automatically after a transaction or a specific event. Common examples of transactional email are : account opening and welcome message, order shipment confirmation, shipment tracking and purchase order status, registration via a contact form, account termination, payment confirmation, invoice etc.'); ?>">&nbsp;</span>
                                         <label class="input-label"><input class="button btn-primary btn btn-xs smtptestclickcls" type="button" value="<?php echo __('Update');?>"></label>
                                         </span>
@@ -473,7 +473,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                                     <input id="email_from" name="testEmail" class="input-text" size="40" type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" placeholder="abc@xyz.com" value="">
                                                     <div class="clearfix"></div>
                                                     <label>&nbsp;</label>
-                                                    <input class="button btn btn-primary" style="margin:10px 0;" id="sendTestMail" name="sendTestMail" type="submit" value="Send">
+                                                    <input class="button btn btn-primary" style="margin:10px 0;" id="sendTestMail" name="sendTestMail" type="submit" value="<?php echo __('Send'); ?>">
                                                 </div>
                                             </td>
                                         </tr>
@@ -502,7 +502,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                      <div class="clearfix"></div>
                                     <label><?php echo __('You want to be notified by e-mail when you do not have enough credits?'); ?></label> <span class="ver_5">
                                     <label class="input-label"><input <?php if($model->getDbData('api_sms_credit') == 1) { echo "checked"; } ?> class="sms_credit radio_nospaceing" name="sms_credit" type="radio" value="1"> <?php echo __('Yes'); ?></label>
-                                    <label class="input-label"><input <?php if($model->getDbData('api_sms_credit') == 0) { echo "checked"; } ?> class="sms_credit radio_spaceing2" name="sms_credit" type="radio" value="0"> No</label></span>
+                                    <label class="input-label"><input <?php if($model->getDbData('api_sms_credit') == 0) { echo "checked"; } ?> class="sms_credit radio_spaceing2" name="sms_credit" type="radio" value="0"> <?php echo __('No'); ?></label></span>
                                     <label class="input-label"><input class="button btn-primary btn btn-xs sms_credit_cls" type="button" value="<?php echo __('Update');?>"></label></span>
                                     <div class="clearfix"></div>
                                     <label>&nbsp;</label>
@@ -514,11 +514,11 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                             <p class="form-data">
                                             <label>Email</label> <input id="value_notify_email" class="input-text" name="value_notify_email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" size="40" type="text" value="<?php echo $model->getDbData('notify_email'); ?>" placeholder="abc@xyz.com"></p>
                                             <p class="form-data">
-                                            <label>Limit</label> <input id="notify_value" class="input-text" name="notify_value" pattern="\d*" size="40" type="text" value="<?php echo $model->getDbData('notify_value'); ?>">
+                                            <label><?php echo __('Limit'); ?></label> <input id="notify_value" class="input-text" name="notify_value" pattern="\d*" size="40" type="text" value="<?php echo $model->getDbData('notify_value'); ?>">
                                             <span class="toolTip" style="margin-left:5px;" title="Alert threshold for remaining credits"></span></p>
                                             <p class="form-data">
                                             <label>&nbsp;</label>
-                                            <input class="button btn btn-primary notify_sms_mail_cls" name="notify_sms_mail" type="submit" value="Save" onclick="return validate('<?php echo __('Please provide valid Email!') ;?>','<?php echo __('Please provide a limit in integer format') ; ?>');"></p>
+                                            <input class="button btn btn-primary notify_sms_mail_cls" name="notify_sms_mail" type="submit" value="<?php echo __('Save'); ?>" onclick="return validate('<?php echo __('Please provide valid Email!') ;?>','<?php echo __('Please provide a limit in integer format') ; ?>');"></p>
                                         </form>
                                     </div>
                                 </td>
@@ -548,8 +548,8 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                         <td class="row1">
                                             <label class="r_label"><strong><?php echo __('Send SMS after order confirmation'); ?></strong></label>
                                             <div class="ver_5">
-                                                <label class="input-label"><input <?php if($model->getDbData('api_sms_order_status') == 1) { echo "checked"; } ?> class="sms_order_setting radio_nonspaceing" name="sms_order_setting" type="radio" value="1"> Yes </label>
-                                                <label class="input-label"><input <?php if($model->getDbData('api_sms_order_status') == 0) { echo "checked"; } ?> class="sms_order_setting radio_spaceing2" name="sms_order_setting" type="radio" value="0"> No</label>
+                                                <label class="input-label"><input <?php if($model->getDbData('api_sms_order_status') == 1) { echo "checked"; } ?> class="sms_order_setting radio_nonspaceing" name="sms_order_setting" type="radio" value="1"> <?php echo __('Yes'); ?> </label>
+                                                <label class="input-label"><input <?php if($model->getDbData('api_sms_order_status') == 0) { echo "checked"; } ?> class="sms_order_setting radio_spaceing2" name="sms_order_setting" type="radio" value="0"> <?php echo __('No'); ?></label>
                                                 <label class="input-label"><input class="button btn-primary btn btn-xs sms_order_setting_cls" type="button" value="<?php echo __('Update');?>"></label>
                                             </div>
                                             <div class="clearfix"></div>
@@ -616,7 +616,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                                                                         <input id="smsfield" name="smsfield" type="hidden" value="<?php echo __('Please fill the phone number field'); ?>">
                                                                                         <input id="senderfield" name="senderfield" type="hidden" value="<?php echo __('Please fill the sender field'); ?>">
                                                                                         <input id="messagefield" name="messagefield" type="hidden" value="<?php echo __('Please fill the message field'); ?>">
-                                                                                        <input class="button sender_order_save btn btn-primary" name="sender_order_save" style="margin:10px 0;" type="submit" value="Save">
+                                                                                        <input class="button sender_order_save btn btn-primary" name="sender_order_save" style="margin:10px 0;" type="submit" value="<?php echo __('Save'); ?>">
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -642,7 +642,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                                                                         </div>
                                                                                         <div class="clearfix"></div>
                                                                                         <label>&nbsp;</label>
-                                                                                        <input class="button testOrdersmssend btn btn-success" style="margin:10px 0;" id="sender_order_submit" name="sender_order_submit" type="button" value="Send">
+                                                                                        <input class="button testOrdersmssend btn btn-success" style="margin:10px 0;" id="sender_order_submit" name="sender_order_submit" type="button" value="<?php echo __('Send'); ?>">
                                                                                         <div class="loading-ajax" style="display: none; width: auto;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>
                                                                                     </td>
                                                                                 </tr>
@@ -670,8 +670,8 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                         <label class="r_label" style="margin-left: 7px;"><strong><?php echo __('Send a SMS confirmation for the shipment of the order'); ?></strong></label>
                                         <div class="ver_5">
                                             <span>
-                                            <label class="input-label"><input <?php if($model->getDbData('api_sms_shipment_status') == 1) { echo "checked"; } ?> class="sms_shiping_setting radio_nonspaceing" name="sms_shiping_setting" type="radio" value="1"> Yes</label>
-                                            <label class="input-label"><input <?php if($model->getDbData('api_sms_shipment_status') == 0) { echo "checked"; } ?> class="sms_shiping_setting radio_spaceing2" name="sms_shiping_setting" type="radio" value="0"> No</label>
+                                            <label class="input-label"><input <?php if($model->getDbData('api_sms_shipment_status') == 1) { echo "checked"; } ?> class="sms_shiping_setting radio_nonspaceing" name="sms_shiping_setting" type="radio" value="1"> <?php echo __('Yes'); ?></label>
+                                            <label class="input-label"><input <?php if($model->getDbData('api_sms_shipment_status') == 0) { echo "checked"; } ?> class="sms_shiping_setting radio_spaceing2" name="sms_shiping_setting" type="radio" value="0"> <?php echo __('No'); ?></label>
                                             <label class="input-label"><input class="button btn-primary btn btn-xs sms_shiping_setting_cls" type="button" value="<?php echo __('Update');?>"></label>
                                             </span> 
                                         </div>
@@ -736,7 +736,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                                                                         <em><?php echo __('- For order date use {order_date}');?></em>
                                                                                     </div>
                                                                                     <div class="clearfix"></div>
-                                                                                    <input class="button sender_shipment_save btn btn-primary" name="sender_shipment_save" style="margin:10px 0;" type="submit" value="Save">
+                                                                                    <input class="button sender_shipment_save btn btn-primary" name="sender_shipment_save" style="margin:10px 0;" type="submit" value="<?php echo __('Save'); ?>">
                                                                                 </td>
                                                                             </tr>
                                                                         </tbody>
@@ -760,7 +760,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                                                                         <em><?php echo __('Sending a test SMS will be deducted from your SMS credits.'); ?></em>
                                                                                     </div>
                                                                                      <div class="clearfix"></div>
-                                                                                     <label>&nbsp;</label><input class="button testSmsShipped btn btn-success" style="margin:10px 0;" id="sender_shipment_submit" name="sender_shipment_submit" type="button" value="Send">
+                                                                                     <label>&nbsp;</label><input class="button testSmsShipped btn btn-success" style="margin:10px 0;" id="sender_shipment_submit" name="sender_shipment_submit" type="button" value="<?php echo __('Send'); ?>">
                                                                                      <div class="loading-ajax" style="display: none; width: auto;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>
                                                                                 </td>
                                                                             </tr>
@@ -788,8 +788,8 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                         <label class="r_label" style="margin-left: 7px;"><strong><?php echo __('Send a campaign SMS'); ?></strong></label>
                                         <div class="radio_bx ver_5">
                                             <span>
-                                            <label class="input-label"><input <?php if($model->getDbData('api_sms_campaign_status') == 1) { echo "checked"; } ?> class="sms_campaign_setting radio_nonspaceing" name="sms_campaign_setting" type="radio" value="1"> Yes</label>
-                                            <label class="input-label"><input <?php if($model->getDbData('api_sms_campaign_status') == 0) { echo "checked"; } ?> class="sms_campaign_setting radio_spaceing2" name="sms_campaign_setting" type="radio" value="0"> No</label>
+                                            <label class="input-label"><input <?php if($model->getDbData('api_sms_campaign_status') == 1) { echo "checked"; } ?> class="sms_campaign_setting radio_nonspaceing" name="sms_campaign_setting" type="radio" value="1"> <?php echo __('Yes'); ?></label>
+                                            <label class="input-label"><input <?php if($model->getDbData('api_sms_campaign_status') == 0) { echo "checked"; } ?> class="sms_campaign_setting radio_spaceing2" name="sms_campaign_setting" type="radio" value="0"> <?php echo __('No'); ?></label>
                                             <label class="input-label"><input class="button btn-primary btn btn-xs sms_campaign_setting_cls" type="button" value="<?php echo __('Update');?>"></label>
                                             </span>
                                         </div>
@@ -817,7 +817,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                                                             </tr>
                                                                             <tr>
                                                                                 <td class="ver_5" style="padding-left:0" valign="top">
-                                                                                    <label><h3 style="margin-top:0px; text-align:right; padding-right:20px;"><?php echo __('SMS Settings:');?></h3></label>
+                                                                                    <label><h3 style="margin-top:0px; text-align:right; padding-right:20px;"><?php echo __('SMS settings:');?></h3></label>
                                                                                 </td>
                                                                                 <td>&nbsp;</td>
                                                                             </tr>
@@ -886,7 +886,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                                                                     </div>
                                                                                     <div class="clearfix"></div>
                                                                                     <label>&nbsp;</label>
-                                                                                    <input class="button sender_campaign_save btn btn-primary" name="sender_campaign_save" style="margin:10px 0;" type="submit" value="Send the campaign">
+                                                                                    <input class="button sender_campaign_save btn btn-primary" name="sender_campaign_save" style="margin:10px 0;" type="submit" value="<?php echo __('Send the campaign'); ?>">
                                                                                     <input name="campaign_save_function" type="hidden" value="campaign_save_function" /></td>
                                                                             </tr>
                                                                         </tbody>
@@ -905,7 +905,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                                                                     </div> 
                                                                                     <div class="clearfix"></div>
                                                                                     <label>&nbsp;</label>
-                                                                                    <input class="button testSmsCampaignsend btn btn-success" id="sender_campaign_test_submit" name="sender_campaign_test_submit" type="button" value="Send">
+                                                                                    <input class="button testSmsCampaignsend btn btn-success" id="sender_campaign_test_submit" name="sender_campaign_test_submit" type="button" value="<?php echo __('Send'); ?>">
                                                                                     <div class="loading-ajax" style="display: none; width: auto;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>
                                                                                 </td>
                                                                             </tr>
@@ -955,7 +955,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                                    <?php echo __(' contacts subscribed and '); ?> 
                                                    <?php echo $model->getNewsletterUnSubscribeCount(); ?> 
                                                    <?php echo __(' contacts unsubscribed from Magento.'); ?><span id="Spantextmore" >
-                                                   <?php echo __(' For more details,'); ?></span><span id="Spantextless" style="display: none;" >
+                                                   <?php echo __('For more details,'); ?></span><span id="Spantextless" style="display: none;" >
                                                    <?php echo __(' For less details,'); ?></span><b>
                                                    <a href="javascript:void(0);" id="showUserlist" style="color: #000000; outline: 0 none; text-decoration: none;"><?php echo __('click here'); ?></a>
                                                    <div class="loading-ajax" style="display: none; width: auto;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>
