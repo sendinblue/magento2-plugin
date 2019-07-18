@@ -29,7 +29,7 @@ class Post extends \Magento\Backend\App\Action
         }
         try {
             $model = $this->sibObject();
-            if (isset($post['submitUpdate']) && $post['submitUpdate'] == 'Update') {
+            if (isset($post['submitUpdate']) && !empty($post['submitUpdate'])) {
                 $this->apiKeyPostProcessConfiguration();
             }
 
@@ -52,17 +52,17 @@ class Post extends \Magento\Backend\App\Action
                 }
             }
             //save value for notify email
-            if (isset($post['notify_sms_mail']) && $post['notify_sms_mail'] == 'Save') {
+            if (isset($post['notify_sms_mail']) && !empty($post['notify_sms_mail'])) {
                 $this->saveNotifyValue();
             }
 
             //save order sms send and body details
-            if (isset($post['sender_order_save']) && $post['sender_order_save'] == 'Save') {
+            if (isset($post['sender_order_save']) && !empty($post['sender_order_save'])) {
                 $this->saveOrderSms();
             }
 
             //save shipped sms send and body details
-            if (isset($post['sender_shipment_save']) && $post['sender_shipment_save'] == 'Save') {
+            if (isset($post['sender_shipment_save']) && !empty($post['sender_shipment_save'])) {
                 $this->saveShippedSms(); 
             }
 
@@ -86,7 +86,7 @@ class Post extends \Magento\Backend\App\Action
              * Description: send test email if smtp setup well.
              *
              */
-            if (isset($post['sendTestMail']) && $post['sendTestMail'] == 'Send') {
+            if (isset($post['sendTestMail']) && !empty($post['sendTestMail'])) {
                 $post = $this->getRequest()->getPostValue();
                 $userEmail = !empty($post['testEmail']) ? $post['testEmail'] : '';
                 $relayData = $model->getDbData('relay_data_status');

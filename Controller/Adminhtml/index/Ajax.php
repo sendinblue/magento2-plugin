@@ -134,7 +134,7 @@ class Ajax extends \Magento\Backend\App\Action
                 }
             }
 
-            if (isset($post['submitUpdateImport']) && $post['submitUpdateImport'] == 'Import Old Subscribers') {
+            if (isset($post['submitUpdateImport']) && !empty($post['submitUpdateImport'])) {
                 $model = $this->sibObject();
                 $listId = $model->getDbData('selected_list_data');
                 $model->sendAllMailIDToSendin($listId);
