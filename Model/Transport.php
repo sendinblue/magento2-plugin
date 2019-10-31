@@ -10,7 +10,7 @@ use Zend\Mail\Message;
 use Zend\Mail\Transport\SmtpOptions;
 use Zend\Mail\Transport\Smtp;
 
-class Transport
+class Transport extends \Zend_Mail_Transport_Smtp implements \Magento\Framework\Mail\TransportInterface
 {
     /** @var MessageInterface */
 	protected $_message;

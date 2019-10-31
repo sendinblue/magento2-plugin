@@ -2,5 +2,4 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <!-- for override magento default Transport class with our custom module model-->
     <preference for="\Magento\Framework\Mail\Transport" type="Sendinblue\Sendinblue\Model\Transport"/>
-    <preference for="\Magento\Framework\Mail\TransportInterface" type="Sendinblue\Sendinblue\Model\Transport"/>
 </config>
