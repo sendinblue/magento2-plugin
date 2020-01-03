@@ -29,7 +29,7 @@ class Post extends \Magento\Backend\App\Action
         }
         try {
             $model = $this->sibObject();
-            if (isset($post['submitUpdate']) && $post['submitUpdate'] == 'Update') {
+            if (isset($post['submitUpdate']) && !empty($post['submitUpdate'])) {
                 $this->apiKeyPostProcessConfiguration();
             }
 
@@ -52,17 +52,17 @@ class Post extends \Magento\Backend\App\Action
                 }
             }
             //save value for notify email
-            if (isset($post['notify_sms_mail']) && $post['notify_sms_mail'] == 'Save') {
+            if (isset($post['notify_sms_mail']) && !empty($post['notify_sms_mail'])) {
                 $this->saveNotifyValue();
             }
 
             //save order sms send and body details
-            if (isset($post['sender_order_save']) && $post['sender_order_save'] == 'Save') {
+            if (isset($post['sender_order_save']) && !empty($post['sender_order_save'])) {
                 $this->saveOrderSms();
             }
 
             //save shipped sms send and body details
-            if (isset($post['sender_shipment_save']) && $post['sender_shipment_save'] == 'Save') {
+            if (isset($post['sender_shipment_save']) && !empty($post['sender_shipment_save'])) {
                 $this->saveShippedSms(); 
             }
 
@@ -86,13 +86,13 @@ class Post extends \Magento\Backend\App\Action
              * Description: send test email if smtp setup well.
              *
              */
-            if (isset($post['sendTestMail']) && $post['sendTestMail'] == 'Send') {
+            if (isset($post['sendTestMail']) && !empty($post['sendTestMail'])) {
                 $post = $this->getRequest()->getPostValue();
                 $userEmail = !empty($post['testEmail']) ? $post['testEmail'] : '';
                 $relayData = $model->getDbData('relay_data_status');
                 if (!empty($userEmail) && $post['smtpservices'] == 1) {
                     if ($relayData == 'enabled') {
-                        $title = __('[SendinBlue SMTP] test email');
+                        $title = __('[Sendinblue SMTP] test email');
                         $tempName = 'sendinsmtp_conf';
                         $respMail = $model->smtpSendMail($userEmail, $title, $tempName, $paramVal = '');
                         if ($respMail['status'] == 1) {
@@ -105,7 +105,7 @@ class Post extends \Magento\Backend\App\Action
                             return;
                         }
                     } else {
-                        $this->messageManager->addError(__('Your SMTP account is not activated and therefore you can\'t use SendinBlue SMTP. For more informations, Please contact our support to: contact@sendinblue.com'));
+                        $this->messageManager->addError(__('Your SMTP account is not activated and therefore you can\'t use Sendinblue SMTP. For more informations, Please contact our support to: contact@sendinblue.com'));
                         $this->_redirect('sendinblue/sib/index');
                         return;
                     }
@@ -365,3 +365,4 @@ class Post extends \Magento\Backend\App\Action
         }
     }
 }
+

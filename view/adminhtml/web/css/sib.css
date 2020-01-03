@@ -33,7 +33,7 @@ body{ font-family: 'Open Sans', sans-serif;}
 }
 .toolTip {
 	background: url("../images/help.png") no-repeat scroll right center transparent;
-	color: #3366FF;
+	color: #044A75;
 	cursor: help;
 	padding:9px;/*-right: 20px;*/
 	position: relative;
@@ -306,7 +306,7 @@ ul.listt li {
 }
 
 .link_action{ 
-color: #268CCD;}
+color: #044A75;}
 
 /*Form*/
 h4, h5, h6{ font-weight:bold;}
@@ -480,9 +480,9 @@ legend img {
 	display:block;	
 	font-size:14px;
 }
-.form-box .heading{background:#3498db; color:#fff; padding:10px; margin:0; line-height:21px; }
+.form-box .heading{background:#044A75; color:#fff; padding:10px; margin:0; line-height:21px; }
 .form-box .heading img{margin-right:5px; position:relative; top:2px; width:18px;}
-.form-box h2.heading{font-weight:500; font-size:18px;}
+.form-box h2.heading{font-weight:500; font-size:18px;display: flex;align-items: center;}
 .form-box-content{padding:10px 15px; border:1px solid #e2e2e2;	font-size:14px !important;}
 .contact-box{width: 190px; height: auto; border-left:2px solid #e2e2e2; padding: 0 0 0 20px; float:right; position:relative;}
 .contact-box:before{ border-bottom: 8px solid transparent;
@@ -494,7 +494,7 @@ legend img {
     position: absolute;
     top: 25px;
     width: 0;}
-.contact-box h2{font-size:18px; color:#268CCD;}	
+.contact-box h2{font-size:18px; color:#044A75;}	
 
 .form-box label{font-weight:normal;}
 .form-box .sub-heading{font-size:15px; font-weight:600;}
@@ -507,14 +507,14 @@ legend img {
 .form-box .form-row .tooltip-form{ padding:15px 10px;}
 
 .btn{padding:7px 20px; font-size:14px; border:none; text-shadow:none; font-weight:600;font-family: 'Open Sans', sans-serif;}
-.btn-primary{ color:#fff; background:#337ab7; border:1px solid #2e6da4;}
+.btn-primary{ color:#fff; background:#044A75; border:1px solid #2e6da4;}
 .btn-success{ color:#fff; background:#5cb85c; border:1px solid #4cae4c;}
 
 .tableblock { padding-bottom:50px;}
 .tableblock th{font-family: 'Open Sans', sans-serif;}
 .tableblock  thead th{background:none; margin:0; text-shadow:none; font-weight:400;}
 .tableblock  thead th h2{padding:0; margin:0;font-weight:500; font-size:18px;}
-.tableblock .heading-thead{background:#3498db; color:#fff; padding:10px; margin:0; line-height:21px; }
+.tableblock .heading-thead{background:#044A75; color:#fff; padding:10px; margin:0; line-height:21px; }
 
 .tooltip-radio{top:5px; position:relative;}
 
@@ -589,7 +589,7 @@ legend img {
 	padding:10px;
 	border:1px solid #e2e2e2;
 	border-collapse: collapse;
-	background-color: #3499db;
+	background-color: #044A75;
 	color: #fff;
 }
 .table-contacts td {

@@ -134,7 +134,7 @@ class Ajax extends \Magento\Backend\App\Action
                 }
             }
 
-            if (isset($post['submitUpdateImport']) && $post['submitUpdateImport'] == 'Import Old Subscribers') {
+            if (isset($post['submitUpdateImport']) && !empty($post['submitUpdateImport'])) {
                 $model = $this->sibObject();
                 $listId = $model->getDbData('selected_list_data');
                 $model->sendAllMailIDToSendin($listId);
@@ -235,7 +235,7 @@ class Ajax extends \Magento\Backend\App\Action
                     $this->getResponse()->setBody($msgVal);
                 } else {
                     $model->updateDbData('api_smtp_status', 0);
-                    $msgVal = __('Your SMTP account is not activated and therefore you can\'t use SendinBlue SMTP. For more informations, please contact our support to: contact@sendinblue.com');
+                    $msgVal = __('Your SMTP account is not activated and therefore you can\'t use Sendinblue SMTP. For more informations, please contact our support to: contact@sendinblue.com');
                     $this->getResponse()->setHeader('Content-type', 'application/text');
                     $this->getResponse()->setBody($msgVal);
                 }
@@ -460,7 +460,9 @@ class Ajax extends \Magento\Backend\App\Action
                 } else {
                     $imgSendinBlue = '<img src="'.$blockObj->getViewFileUrl('Sendinblue_Sendinblue::images/disabled.gif').'" id="ajax_contact_status_'.$i.'" title="'.$title2.'" >';
                 }
-
+                $imgMagento = str_replace('_view','Magento/backend', $imgMagento);
+                $imgSendinBlue = str_replace('_view','Magento/backend', $imgSendinBlue);
+                $imgSms = str_replace('_view','Magento/backend', $imgSms);
                 $message .= '<tr  class="even pointer"><td class="a-left">'.$email.'</td><td class="a-left">'.$client.'</td><td class="a-left">'.$phone.'</td><td class="a-left">'.$imgMagento.'</td>
                     <td class="a-left"><a status="'.$showStatus.'" email="'.$email.'" class="ajax_contacts_href" href="javascript:void(0)">
             '.$imgSendinBlue.'</a></td><td class="a-left last">
@@ -635,3 +637,4 @@ class Ajax extends \Magento\Backend\App\Action
         }
     }
 }
+

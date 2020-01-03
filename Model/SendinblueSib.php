@@ -87,9 +87,9 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
             $folderId = $result['key'];
             $existList = $result['list_name'];
         }
-        //Create the partner's name i.e. Shopify on SendinBlue platform
+        //Create the partner's name i.e. Shopify on Sendinblue platform
         $this->partnerMagento();
-        // create list in SendinBlue
+        // create list in Sendinblue
         $this->createNewList($folderId, $existList);
     }
 
@@ -106,7 +106,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-    * Description: Creates a list by the name "Shopify" on user's SendinBlue account.
+    * Description: Creates a list by the name "Shopify" on user's Sendinblue account.
     *
     * @author: Amar Pandey <amarpandey@sendinblue.com>
     * @param: useremail, doubleoptinUrl, storeId ,shoplang
@@ -129,9 +129,6 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
         ); 
         $listResp = $mailin->createList($data);
         $this->_resourceConfig->saveConfig('sendinblue/selected_list_data', trim($listResp['data']['id']), $this->_scopeTypeDefault, $this->_storeId);
-        //list id
-
-        $this->sendAllMailIDToSendin($listResp['data']['id']);
     }
 
 
@@ -225,7 +222,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
 
     /**
     * Description: reate Normal, Transactional, Calculated and Global attributes and their values
-    * on SendinBlue platform. This is necessary for the Shopify to add subscriber's details.
+    * on Sendinblue platform. This is necessary for the Shopify to add subscriber's details.
     *
     * @author: Amar Pandey <amarpandey@sendinblue.com>
     * @param: no
@@ -321,7 +318,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-    * Description: API config value from SendinBlue with date format.
+    * Description: API config value from Sendinblue with date format.
     *
     * @author: Amar Pandey <amarpandey@sendinblue.com>
     * @param: storeID
@@ -390,7 +387,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
 
     /**
     * Description: Method is used to send all the subscribers from Shopify to
-    * SendinBlue for adding / updating purpose.
+    * Sendinblue for adding / updating purpose.
     *
     * @author: Amar Pandey <amarpandey@sendinblue.com>
     * @param: Sib listId
@@ -400,7 +397,8 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     public function sendAllMailIDToSendin($listId)
     {
         $emailValue = $this->getSubscribeCustomer();
-        $baseUrl = $this->_storeManagerInterface->getStore()->getBaseUrl();
+        $mediaUrl = $this->_storeManagerInterface->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+        $fileName = $this->getDbData('sendin_csv_file_name');
         $apiKey = !empty($this->apiKey) ? $this->apiKey : $this->getDbData('api_key');
         if ($emailValue > 0 && !empty($apiKey)) {
             $this->updateDbData('import_old_user_status', 1);
@@ -408,7 +406,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
             $listIdVal = explode('|', $listId);
             $mailinObj = $this->createObjMailin($apiKey);
             $userDataInformation['key'] = $apiKey;
-            $userDataInformation['url'] = $baseUrl.'pub/media/sendinblue_csv/ImportSubUsersToSendinblue.csv';
+            $userDataInformation['url'] = $mediaUrl.'sendinblue_csv/'.$fileName.'.csv';
             $userDataInformation['listids'] = $listIdVal; // $list;
             $userDataInformation['notify_url'] = '';
             $responseValue = $mailinObj->importUsers($userDataInformation);
@@ -422,7 +420,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-    * Description: Fetches all the subscribers of Shopify and adds them to the SendinBlue database.
+    * Description: Fetches all the subscribers of Shopify and adds them to the Sendinblue database.
     *
     * @author: Amar Pandey <amarpandey@sendinblue.com>
     * @param: get user detail
@@ -495,8 +493,9 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
         if (!is_dir($this->_dir->getPath('media').'/sendinblue_csv')) {
             mkdir($this->_dir->getPath('media').'/sendinblue_csv', 0777, true);
         }
-
-        $handle = fopen($this->_dir->getPath('media').'/sendinblue_csv/ImportSubUsersToSendinblue.csv', 'w+');
+		$fileName = rand();
+		$this->updateDbData('sendin_csv_file_name', $fileName);
+        $handle = fopen($this->_dir->getPath('media').'/sendinblue_csv/'.$fileName.'.csv', 'w+');
         $keyValue = array_keys($attributesName);
         array_splice($keyValue, 0, 0, 'EMAIL');
         fwrite($handle, implode(';', $keyValue)."\n");
@@ -641,7 +640,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-    * Description: Show  SMS  credit from SendinBlue.
+    * Description: Show  SMS  credit from Sendinblue.
     *
     * @author: Amar Pandey <amarpandey@sendinblue.com>
     * @param: ApiKey
@@ -772,7 +771,9 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
                 mkdir($this->_dir->getPath('media').'/sendinblue_csv', 0777, true);
             }
 
-            $handle = fopen($this->_dir->getPath('media').'/sendinblue_csv/ImportOldOrdersToSendinblue.csv', 'w+');
+            $fileName = rand();
+            $this->updateDbData('sendin_csv_file_name', $fileName);
+            $handle = fopen($this->_dir->getPath('media').'/sendinblue_csv/'.$fileName.'.csv', 'w+');
             fwrite($handle, 'EMAIL;ORDER_ID;ORDER_PRICE;ORDER_DATE'.PHP_EOL);
             $collection = $this->getCollection();
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
@@ -813,9 +814,10 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
             $userDataInformation = array();
             $listIdVal = explode('|', $listId);
             $mailinObj = $this->createObjMailin($apiKey);
-            $baseUrl = $this->_storeManagerInterface->getStore()->getBaseUrl();
+            $baseUrl = $this->_storeManagerInterface->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+            $fileName = $this->getDbData('sendin_csv_file_name');
             $userDataInformation['key'] = $apiKey;
-            $userDataInformation['url'] = $baseUrl.'pub/media/sendinblue_csv/ImportOldOrdersToSendinblue.csv';
+            $userDataInformation['url'] = $baseUrl.'sendinblue_csv/'.$fileName.'.csv';
             $userDataInformation['listids'] = $listIdVal; // $list;
             $userDataInformation['notify_url'] = '';
             $responseValue = $mailinObj->importUsers($userDataInformation);
@@ -953,7 +955,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-    * Description: Send SMS from SendinBlue.
+    * Description: Send SMS from Sendinblue.
     * Get Param sender and msg fields.
     */
     public function sendSmsApi($dataSms)
@@ -964,7 +966,9 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
             $dataFinal = array( "to" => trim($dataSms['to']),
                     "from" => trim($dataSms['from']),
                     "text" => trim($dataSms['text']),
-                    "type" => trim($dataSms['type'])
+                    "type" => trim($dataSms['type']),
+                    "source" => 'api',
+                    "plugin" => 'magento2-plugin'
                 );
             $dataResp = $mailin->sendSms($dataFinal);
 
@@ -1106,7 +1110,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-    * Description: Send single user in SendinBlue.
+    * Description: Send single user in Sendinblue.
     *
     */
     public function subscribeByruntime($userEmail, $updateDataInSib)
@@ -1118,11 +1122,11 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
         $sendinConfirmType = $this->getDbData('confirm_type');
         if ($sendinConfirmType === 'doubleoptin') {
             $listId = $this->getDbData('optin_list_id');
+            $updateDataInSib['DOUBLE_OPT-IN'] = 2;
         } else {
             $listId = $this->getDbData('selected_list_data');
         }
 
-        
         $apiKey = trim($this->getDbData('api_key'));
         if (!empty($apiKey)) {
             $mailin = $this->createObjMailin($apiKey);
@@ -1140,7 +1144,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-    * Description: Checks whether the SendinBlue API key and the SendinBlue subscription form is enabled
+    * Description: Checks whether the Sendinblue API key and the Sendinblue subscription form is enabled
     * and returns the true|false accordingly.
     */
     public function syncSetting()
@@ -1155,7 +1159,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-    * Description: Send single user in SendinBlue.
+    * Description: Send single user in Sendinblue.
     *
     */
     public function unsubscribeByruntime($userEmail)
@@ -1230,6 +1234,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
             $lang = $this->getDbData('sendin_config_lang');
 
             $path = $this->_blocktemp->getViewFileUrl('Sendinblue_Sendinblue::email_temp/'.strtolower($lang).'/'.$tempName.'.html');
+	    $path = str_replace('_view','Magento/backend', $path);
             $bodyContent = file_get_contents($path);
             if (!empty($paramVal)) {
                 foreach($paramVal as $key=>$replaceVal) {
@@ -1254,7 +1259,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     {
         $notifyEmail = $this->getDbData('notify_email');
         $tempName = 'sendin_notification';
-        $title = __('[SendinBlue] Notification : Credits SMS');
+        $title = __('[Sendinblue] Notification : Credits SMS');
         $siteName = $this->_storeManagerInterface->getStore()->getName();
         $paramVal = array('{present_credit}' => $remainingSms, '{site_name}' => $siteName);
         $this->smtpSendMail($notifyEmail, $title, $tempName, $paramVal);
@@ -1326,11 +1331,17 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
 
             $to = array($to => '');
             $from = array($senderEmail, $senderName);
+            $searchValue = "({{\s*doubleoptin\s*}})";
 
             $htmlContent = str_replace('{title}', $subject, $htmlContent);
             $htmlContent = str_replace('https://[DOUBLEOPTIN]', '{subscribe_url}', $htmlContent);
             $htmlContent = str_replace('http://[DOUBLEOPTIN]', '{subscribe_url}', $htmlContent);
+            $htmlContent = str_replace('https://{{doubleoptin}}', '{subscribe_url}', $htmlContent);
+            $htmlContent = str_replace('http://{{doubleoptin}}', '{subscribe_url}', $htmlContent);
+            $htmlContent = str_replace('https://{{ doubleoptin }}', '{subscribe_url}', $htmlContent);
+            $htmlContent = str_replace('http://{{ doubleoptin }}', '{subscribe_url}', $htmlContent);
             $htmlContent = str_replace('[DOUBLEOPTIN]', '{subscribe_url}', $htmlContent);
+            $htmlContent = preg_replace($searchValue, '{subscribe_url}', $htmlContent);
             $htmlContent = str_replace('{site_name}', $siteName, $htmlContent);
             $htmlContent = str_replace('{unsubscribe_url}', $pathResp, $htmlContent);
             $htmlContent = str_replace('{subscribe_url}', $pathResp, $htmlContent);
@@ -1517,9 +1528,13 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     */
     public function checkPortStatus()
     {
-        $relay_port_status = @fsockopen('smtp-relay.sendinblue.com', 587);
-        if (!$relay_port_status) {
-            return 0;
+        try {
+            $relay_port_status = fsockopen(‘smtp-relay.sendinblue.com’, 587);
+            if (!$relay_port_status) {
+                return 0;
+            }
+        } catch (\Exception $e) {
+           return 1;
         }
     }
 
