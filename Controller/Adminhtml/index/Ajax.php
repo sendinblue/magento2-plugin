@@ -31,8 +31,22 @@ class Ajax extends \Magento\Backend\App\Action
                 $this->ajaxSubscribeConfig();
             }
 
+            if (isset($post['sync_cron_activate']) && !empty($post['sync_cron_activate'])) {
+                $this->ajaxSyncContactConfig();
+            }
+
             if (isset($post['ord_track_btn']) && !empty($post['ord_track_btn'])) {
                 $this->ajaxOrderStatus();
+            }
+            if (isset($post['sib_tracking']) && !empty($post['sib_tracking'])) {
+                if ($post['sib_track_status'] == 1) {
+                    $this->automationEnable();
+                } else {
+                    $model->updateDbData('sib_track_status', $post['sib_track_status']);
+                    $msgVal = __('Your setting has been successfully saved');
+                    $this->getResponse()->setHeader('Content-type', 'application/text');
+                    $this->getResponse()->setBody($msgVal);
+                }
             }
             //SMTP settings enable or disable
             if (isset($post['smtp_post']) && !empty($post['smtp_post'])) {
@@ -122,7 +136,7 @@ class Ajax extends \Magento\Backend\App\Action
                 $post = $this->getRequest()->getPostValue();
                 if ($post['ord_track_status'] == 1) {
                     $respData = $model->importOrderhistory();
-                    if ($respData == 0) {
+                    if ($respData) {
                         $msgVal = __('Order history has been import successfull');
                         $this->getResponse()->setHeader('Content-type', 'application/text');
                         $this->getResponse()->setBody($msgVal);
@@ -148,12 +162,6 @@ class Ajax extends \Magento\Backend\App\Action
                     $this->_redirect('sendinblue/sib/index');
                     return;
                 }
-            }
-
-            //load contact list .
-            if (isset($post['contact_data']) && !empty($post['contact_data'])) {
-                $post = $this->getRequest()->getPostValue();
-                $this->loadContact();
             }
 
             //Subscribe contact list .
@@ -194,6 +202,37 @@ class Ajax extends \Magento\Backend\App\Action
         $this->getResponse()->setBody($msgVal);
     }
 
+    public function ajaxSyncContactConfig()
+    {
+        $post = $this->getRequest()->getPostValue();
+        if (!$post) {
+            $this->_redirect('sendinblue/sib/index');
+            return;
+        }
+        $model = $this->sibObject();
+        $model->updateDbData('sib_contact_sync_list', $post['sib_contact_sync_list']);
+        $model->updateDbData('sib_contact_sync_status', $post['sib_contact_sync_status']);
+
+        if( $post['sib_contact_sync_list'] != 0 && $post['sib_contact_sync_status'] != 0 ) {
+                $model->sendAllMailIDToSendin($post['sib_contact_sync_list']);
+                $importOlduserStatus = $model->getDbData('import_old_user_status');
+                if ($importOlduserStatus == 0) {
+                    $msgVal = __('Old subscribers imported successfully');
+                }
+                else if ($importOlduserStatus == 1) {
+                    $msgVal = __('Old subscribers not imported successfully, please click on Save button to import them again');
+                }
+                else {
+                    $msgVal = __('Old subscribers are not exists');
+                }
+        }
+        else {
+            $msgVal = __('Sendiblue configuration setting Successfully updated');
+        }
+        $this->getResponse()->setHeader('Content-type', 'application/text');
+        $this->getResponse()->setBody($msgVal);
+    }
+
     public function ajaxOrderStatus() {
         $post = $this->getRequest()->getPostValue();
         if (!$post) {
@@ -203,9 +242,44 @@ class Ajax extends \Magento\Backend\App\Action
         $model = $this->sibObject();
         $model->updateDbData('ord_track_status', $post['ord_track_status']);
         $model->updateDbData('order_import_status', $post['ord_track_status']);
-        $msgVal = __('Sendiblue configuration setting Successfully updated');
+        $msgVal = __('Sendiblue configuration setting Successfully updated ');
+        if ($post['import_order_data'] == 1) {
+            $respData = $model->importOrderhistory();
+            if ($respData) {
+                $msgVal .= __('Order history has been import successfully');
+                $this->getResponse()->setHeader('Content-type', 'application/text');
+                $this->getResponse()->setBody($msgVal);
+            } else {
+                $msgVal .= __('Order history has not been imported successfully');
+                $this->getResponse()->setHeader('Content-type', 'application/text');
+                $this->getResponse()->setBody($msgVal);
+            }
+        }
         $this->getResponse()->setHeader('Content-type', 'application/text');
         $this->getResponse()->setBody($msgVal);
+    }
+
+    public function automationEnable() {
+        $post = $this->getRequest()->getPostValue();
+        if (!$post) {
+            $this->_redirect('sendinblue/sib/index');
+            return;
+        }
+        $model = $this->sibObject();
+        $trackResp = $model->trackingSmtp();
+        if (!empty($trackResp['marketingAutomation']) && $trackResp['marketingAutomation']['enabled'] == 1) {
+            $model->updateDbData('sib_track_status', $post['sib_track_status']);
+            $model->updateDbData('sib_automation_key', $trackResp['marketingAutomation']['key']);
+            $model->updateDbData('sib_automation_enable', $trackResp['marketingAutomation']['enabled']);
+            $msgVal = __('Sendiblue configuration setting Successfully updated');
+            $this->getResponse()->setHeader('Content-type', 'application/text');
+            $this->getResponse()->setBody($msgVal);
+        } else {
+            $model->updateDbData('sib_track_status', 0);
+            $msgVal = __("To activate Marketing Automation , please go to your Sendinblue's account or contact us at contact@sendinblue.com");
+            $this->getResponse()->setHeader('Content-type', 'application/text');
+            $this->getResponse()->setBody($msgVal);
+        }
     }
 
     public function ajaxSmtpStatus()
@@ -216,31 +290,27 @@ class Ajax extends \Magento\Backend\App\Action
             return;
         }
         $model = $this->sibObject();
-        $apiKey = $model->getDbData('api_key');
-        if (!empty($apiKey)) {
-            $dataResp = $model->trackingSmtp();
-            if (isset($dataResp['code']) && $dataResp['code'] == 'success') {
-                if (isset($dataResp['data']['relay_data']['status']) && $dataResp['data']['relay_data']['status'] == 'enabled') {
-                    $model->updateDbData('api_smtp_status', $post['smtps_tatus']);
-                    $model->updateDbData('relay_data_status', $dataResp['data']['relay_data']['status']);
-                    $model->updateDbData('smtp_authentication', 'crammd5');
-                    $model->updateDbData('smtp_username', $dataResp['data']['relay_data']['data']['username']);
-                    $model->updateDbData('smtp_password', $dataResp['data']['relay_data']['data']['password']);
-                    $model->updateDbData('smtp_host', $dataResp['data']['relay_data']['data']['relay']);
-                    $model->updateDbData('smtp_port', $dataResp['data']['relay_data']['data']['port']);
-                    $model->updateDbData('smtp_tls', 'tls');
-                    $model->updateDbData('smtp_option', 'smtp');
-                    $msgVal = __('Your setting has been successfully saved');
-                    $this->getResponse()->setHeader('Content-type', 'application/text');
-                    $this->getResponse()->setBody($msgVal);
-                } else {
-                    $model->updateDbData('api_smtp_status', 0);
-                    $msgVal = __('Your SMTP account is not activated and therefore you can\'t use Sendinblue SMTP. For more informations, please contact our support to: contact@sendinblue.com');
-                    $this->getResponse()->setHeader('Content-type', 'application/text');
-                    $this->getResponse()->setBody($msgVal);
-                }
-            }
+        $pass_data = trim($post['smtp_pass']);
+        $dataResp = $model->trackingSmtp();
+        if (empty($pass_data) || !$dataResp) {
+            $model->updateDbData('api_smtp_status', 0);
+            $msgVal = __('Your SMTP account is not activated and therefore you can\'t use Sendinblue SMTP. For more informations, please contact our support to: contact@sendinblue.com');
+        } else if ($dataResp['relay']['enabled']) {
+            $model->updateDbData('api_smtp_status', $post['smtps_tatus']);
+            $model->updateDbData('relay_data_status', 'enabled');
+            $model->updateDbData('smtp_authentication', 'crammd5');
+            $model->updateDbData('smtp_username', $dataResp['relay']['data']['userName']);
+            $model->updateDbData('smtp_password', $pass_data);
+            $model->updateDbData('smtp_host', $dataResp['relay']['data']['relay']);
+            $model->updateDbData('smtp_port', $dataResp['relay']['data']['port']);
+            $model->updateDbData('smtp_tls', 'tls');
+            $model->updateDbData('smtp_option', 'smtp');
+            $msgVal = __('Your setting has been successfully saved');
+        } else {
+            $msgVal = __('Your SMTP account is not activated and therefore you can\'t use Sendinblue SMTP. For more informations, please contact our support to: contact@sendinblue.com');
         }
+        $this->getResponse()->setHeader('Content-type', 'application/text');
+        $this->getResponse()->setBody($msgVal);
     }
     //notify sms and update sms status
 
@@ -296,7 +366,7 @@ class Ajax extends \Magento\Backend\App\Action
         $doubleoptinRedirectUrl = !empty($post['doubleoptin_redirect_url']) ? $post['doubleoptin_redirect_url'] : '';
         $finalConfirmEmail = !empty($post['final_confirm_email']) ? $post['final_confirm_email'] : '';
         $finalTempId = !empty($post['template_final']) ? $post['template_final'] : '';
-        $shopApiKey = $model->getDbData('api_key');
+        $shopApiKeyStatus = $model->getDbData('api_key_status');
 
         $model->updateDbData('doubleoptin_template_id', $doubleOptinTempId);
         $model->updateDbData('template_id', $valueTemplateId);
@@ -310,21 +380,19 @@ class Ajax extends \Magento\Backend\App\Action
         if (!empty($subscribeConfirmType)) {
             $model->updateDbData('confirm_type', $subscribeConfirmType);
             if ($subscribeConfirmType == 'doubleoptin') {
-                $resOptin = $model->checkFolderListDoubleoptin($shopApiKey);
+                $resOptin = $model->checkFolderListDoubleoptin();
                 if (!empty($resOptin['optin_id'])) {
                     $model->updateDbData('optin_list_id', $resOptin['optin_id']);
                 }
 
-                if ($resOptin === false) {
-                    $mailin = $model->createObjMailin($shopApiKey);
-                    if (!empty($shopApiKey)) {
+                if ( $resOptin === false && !empty($shopApiKeyStatus) ) {
+                    $mailin = $model->createObjSibClient();
+
                         $data = [];
                         $data = ["name"=> "FORM"];
                         $folderRes = $mailin->createFolder($data);
                         $folderId = $folderRes['data']['id'];
-                    }
 
-                    if (!empty($shopApiKey)) {
                         $data = [];
                         $data = [
                           "list_name" => 'Temp - DOUBLE OPTIN',
@@ -333,7 +401,6 @@ class Ajax extends \Magento\Backend\App\Action
                         $listResp = $mailin->createList($data);
                         $listId = $listResp['data']['id'];
                         $model->updateDbData('optin_list_id', $listId);
-                    }
                 }
             }
         }
@@ -349,169 +416,6 @@ class Ajax extends \Magento\Backend\App\Action
         $this->messageManager->addSuccess(__('Sendiblue configuration setting Successfully updated'));
         $this->_redirect('sendinblue/sib/index');
         return;
-    }
-    public function loadContact()
-    {
-        $model = $this->sibObject();
-        $blockObj = $this->viewObject();
-        $post = $this->getRequest()->getPostValue();
-        $title1 = __('Unsubscribe the contact');
-        $title2 = __('Subscribe the contact');
-        $title3 = __('Unsubscribe the sms');
-        $title4 = __('Subscribe the sms');
-        $first = __('First');
-        $last = __('Last');
-        $previous = __('Previous');
-        $next = __('Next');
-        $yes = __('yes');
-        $no = __('no');
-        $page = (int)$post['page'];
-        $currentPage = $page;
-        $page--;
-        $perPage = 20;
-        $previousButton = true;
-        $nextButton = true;
-        $firstButton = true;
-        $lastButton = true;
-        $start = $page * $perPage;
-        $count = $model->getCustAndNewslCount();
-        $noOfPaginations = ceil($count / $perPage);
-        if ($currentPage >= 7) {
-            $startLoop = $currentPage - 3;
-            if ($noOfPaginations > $currentPage + 3) {
-                $endLoop = $currentPage + 3;
-            } elseif ($currentPage <= $noOfPaginations && $currentPage > $noOfPaginations - 6) {
-                $startLoop = $noOfPaginations - 6;
-                $endLoop   = $noOfPaginations;
-            } else {
-                $endLoop = $noOfPaginations;
-            }
-        } else {
-            $startLoop = 1;
-            if ($noOfPaginations > 7) {
-                $endLoop = 7;
-            } else {
-                $endLoop = $noOfPaginations;
-            }
-        }
-
-        $collection = $model->getNewsletterSubscribe($start, $perPage);
-        $sendinUserStatus = $model->checkUserSendinStatus($collection);
-
-        $sendinUserResult = isset($sendinUserStatus['data']) ? $sendinUserStatus['data'] : '';
-        if (!empty($collection)) {
-            $i = 1;
-            $message = '';
-            foreach ($collection as $subscriber) {
-                $email = isset($subscriber['email']) ? $subscriber['email'] : '';
-                $phone = isset($subscriber['SMS']) ? $subscriber['SMS'] : '';
-
-                $client = (!empty($subscriber['client']) > 0) ? $yes : $no ;
-                $showStatus = '';
-                $smsStatus = '';
-                if (isset($sendinUserResult[$email])) {
-                    $emailBalanceValue = isset($sendinUserResult[$email]['email_bl']) ? $sendinUserResult[$email]['email_bl'] : '';
-
-                    if ($emailBalanceValue === 1 || $sendinUserResult[$email] == null) {
-                        $showStatus = 0;
-                    }
-
-                    if ($emailBalanceValue === 0) {
-                        $showStatus = 1;
-                    }
-
-                    $smsBalance = isset($sendinUserResult[$email]['sms_bl']) ? $sendinUserResult[$email]['sms_bl'] : '';
-                    $smsExist = isset($sendinUserResult[$email]['sms_exist']) ? $sendinUserResult[$email]['sms_exist'] : '';
-                    $subScriberTelephone = isset($subscriber['SMS']) ? $subscriber['SMS'] : '';
-
-                    if ($smsBalance === 1 && $smsExist > 0) {
-                        $smsStatus = 0;
-                    } else if ($smsBalance === 0 && $smsExist > 0) {
-                        $smsStatus = 1;
-                    } else if ($smsExist <= 0 && empty($subScriberTelephone)) {
-                         $smsStatus = 2;
-                    } else if ($smsExist <= 0 && !empty($subScriberTelephone)) {
-                        $smsStatus = 3;
-                    }
-                }
-
-                if ($subscriber['subscriber_status'] == 1) { 
-                    $imgMagento = '<img src="'.$blockObj->getViewFileUrl('Sendinblue_Sendinblue::images/enabled.gif').'" >';
-                } else {
-                    $imgMagento = '<img src="'.$blockObj->getViewFileUrl('Sendinblue_Sendinblue::images/disabled.gif').'" >';
-                }
-
-                $smsStatus = $smsStatus >= 0 ? $smsStatus : '';
-
-                if ($smsStatus === 1) {
-                    $imgSms = '<img src="'.$blockObj->getViewFileUrl('Sendinblue_Sendinblue::images/enabled.gif').'" id="ajax_contact_status_'.$i.'" title="'.$title3.'" >';
-                } else if ($smsStatus === 0) {
-                    $imgSms = '<img src="'.$blockObj->getViewFileUrl('Sendinblue_Sendinblue::images/disabled.gif').'" id="ajax_contact_status_'.$i.'" title="'.$title4.'" >';
-                } else if ($smsStatus === 2 || $smsStatus === '') {
-                    $imgSms = '';
-                } else if ($smsStatus === 3) {
-                    $imgSms = 'Not synchronized';
-                }
-
-                $showStatus = !empty($showStatus) ? $showStatus : '0';
-
-                if ($showStatus == 1) {
-                    $imgSendinBlue = '<img src="'.$blockObj->getViewFileUrl('Sendinblue_Sendinblue::images/enabled.gif').'" id="ajax_contact_status_'.$i.'" title="'.$title1.'" >';
-                } else {
-                    $imgSendinBlue = '<img src="'.$blockObj->getViewFileUrl('Sendinblue_Sendinblue::images/disabled.gif').'" id="ajax_contact_status_'.$i.'" title="'.$title2.'" >';
-                }
-                $imgMagento = str_replace('_view','Magento/backend', $imgMagento);
-                $imgSendinBlue = str_replace('_view','Magento/backend', $imgSendinBlue);
-                $imgSms = str_replace('_view','Magento/backend', $imgSms);
-                $message .= '<tr  class="even pointer"><td class="a-left">'.$email.'</td><td class="a-left">'.$client.'</td><td class="a-left">'.$phone.'</td><td class="a-left">'.$imgMagento.'</td>
-                    <td class="a-left"><a status="'.$showStatus.'" email="'.$email.'" class="ajax_contacts_href" href="javascript:void(0)">
-            '.$imgSendinBlue.'</a></td><td class="a-left last">
-            '.$imgSms.'</td></tr>';
-
-                $i++;
-            }
-        }
-        $messagePaging = '';
-        $messagePaging .= '<tr><td colspan="7"><div class="pagination"><ul class="pull-left">';
-
-        if ($firstButton && $currentPage > 1) {
-            $messagePaging .= '<li p="1" class="active">'.$first.'</li>';
-        } else if ($firstButton) {
-            $messagePaging .= '<li p="1" class="inactive">'.$first.'</li>';
-        }
-
-        if ($previousButton && $currentPage > 1) {
-            $previousValue = $currentPage - 1;
-            $messagePaging .= '<li p="'.$previousValue.'" class="active">'.$previous.'</li>';
-        } else if ($previousButton) {
-            $messagePaging .= '<li class="inactive">'.$previous.'</li>';
-        }
-
-        for ($i = $startLoop; $i <= $endLoop; $i++) {
-            if ($currentPage == $i) {
-                $messagePaging .= '<li p="'.$i.'" style="color:#fff;background-color:#000000;" class="active">'.$i.'</li>';
-            } else {
-                $messagePaging .= '<li p="'.$i.'"  class="active">'.$i.'</li>';
-            }
-        }
-
-        if ($nextButton && $currentPage < $noOfPaginations) {
-            $nextValue = $currentPage + 1;
-            $messagePaging .= '<li p="'.$nextValue.'" class="active">'.$next.'</li>';
-        } else if ($nextButton) {
-            $messagePaging .= '<li class="inactive">'.$next.'</li>';
-        }
-
-        if ($lastButton && $currentPage < $noOfPaginations) {
-            $messagePaging .= '<li p="'.$noOfPaginations.'" class="active">'.$last.'</li>';
-        } else if ($lastButton) {
-            $messagePaging .= '<li p="'.$noOfPaginations.'" class="inactive">'.$last.'</li>';
-        }
-
-        if ($count != 0) {
-            $this->getResponse()->setHeader('Content-type', 'application/html');
-            $this->getResponse()->setBody($message . $messagePaging).'</td></tr>';
-        }
     }
 
     //subscribe contact from contact list

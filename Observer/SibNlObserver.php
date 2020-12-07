@@ -5,7 +5,7 @@
  * URL:  https:www.sendinblue.com
  * Do not edit or add to this file if you wish to upgrade Sendinblue Magento plugin to newer
  * versions in the future. If you wish to customize Sendinblue magento plugin for your
- * needs then we can't provide a technical support.
+ * needs then we can't provide a technical support
  **/
 namespace Sendinblue\Sendinblue\Observer;
 

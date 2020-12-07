@@ -22,7 +22,7 @@ class SibOrderObserver implements ObserverInterface
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $model = $objectManager->create('Sendinblue\Sendinblue\Model\SendinblueSib');
-        $apiKey = $model->getDbData('api_key');
+        $apiKeyV3 = $model->getDbData('api_key_v3');
         $trackStatus = $model->getDbData('ord_track_status');
         $dateValue = $model->getDbData('sendin_date_format');
         $orderStatus = $model->getDbData('api_sms_order_status');
@@ -39,17 +39,13 @@ class SibOrderObserver implements ObserverInterface
         $dateAdded = $orderData['created_at'];
         $sibStatus = $model->syncSetting();
         if ($sibStatus == 1) {
-            if (!empty($apiKey)) {
-                $mailin = $model->createObjMailin($apiKey);
+            if (!empty($apiKeyV3)) {
+                $mailin = $model->createObjSibClient();
             }
 
-            if (!empty($dateValue) && $dateValue == 'dd-mm-yyyy') {
-                $orderDate = date('d-m-Y', strtotime($dateAdded));
-            } else {
-                $orderDate = date('m-d-Y', strtotime($dateAdded));
-            }
+            $orderDate = date('Y-m-d', strtotime($dateAdded));
 
-            if ($trackStatus == 1 && $NlStatus == 1 && !empty($apiKey)) {
+            if ($trackStatus == 1 && $NlStatus == 1 && !empty($apiKeyV3)) {
                 $blacklistedValue = 0;
                 $attrData = [];
                 $attrData['ORDER_DATE'] = $orderDate;
@@ -57,9 +53,10 @@ class SibOrderObserver implements ObserverInterface
                 $attrData['ORDER_ID'] = $orderID;
                 $dataSync = ["email" => $email,
                 "attributes" => $attrData,
-                "blacklisted" => $blacklistedValue
+                "blacklisted" => false,
+                "updateEnabled" => true
                 ];
-                $mailin->createUpdateUser($dataSync);
+                $mailin->createUser($dataSync);
             }
             if ($orderStatus == 1 && !empty($senderOrder) && !empty($senderOrderMessage)) {
                 $custId = $orderData['customer_id'];

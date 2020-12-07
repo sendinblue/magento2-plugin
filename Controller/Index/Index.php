@@ -41,24 +41,25 @@ class Index extends \Magento\Framework\App\Action\Action
     {
         $nlStatus = $this->_model->checkNlStatus($userEmail);
         if (!empty($userEmail) && $nlStatus = 1) {
-            $apiKey = $this->_model->getDbData('api_key');
             $optinListId = $this->_model->getDbData('optin_list_id');
             $listId = $this->_model->getDbData('selected_list_data');
 
-            $mailin = $this->_model->createObjMailin($apiKey);
+            $mailin = $this->_model->createObjSibClient();
 
-            $data = array( "email" => $userEmail,
-                    "attributes" => array("DOUBLE_OPT-IN"=>1),
-                    "blacklisted" => 0,
-                    "listid" => array($listId),
-                    "listid_unlink" => array($optinListId),
-                    "blacklisted_sms" => 0
+            $data = array(
+                    "attributes" => array("DOUBLE_OPT-IN"=>'1'),
+                    "emailBlacklisted" => false,
+                    "listIds" => array_map('intval', explode('|', $listId)),
+                    "unlinkListIds" => array_map('intval', explode('|', $optinListId)),
+                    "smsBlacklisted" => false
                 );
-            $mailin->createUpdateUser($data);
+
+            $mailin->updateUser($userEmail, $data);
+
             $confirmEmail = $this->_model->getDbData('final_confirm_email');
             if ($confirmEmail === 'yes') {
                 $finalId = $this->_model->getDbData('final_template_id');
-                $this->_model->sendOptinConfirmMailResponce($userEmail, $finalId, $apiKey);
+                $this->_model->sendOptinConfirmMailResponce($userEmail, $finalId);
             }
         }
         $doubleoptinRedirect = $this->_model->getDbData('doubleoptin_redirect');
@@ -67,7 +68,7 @@ class Index extends \Magento\Framework\App\Action\Action
             header("Location: ".$doubleoptinRedirect);
             ob_flush_end();
         } else {
-            $shopName = $_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME'];
+            $shopName = $this->_model->_getValueDefault->getValue('web/unsecure/base_url', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
             header("Location: ".$shopName);
             ob_flush_end();
         }

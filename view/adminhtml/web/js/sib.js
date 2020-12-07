@@ -473,20 +473,6 @@ require([
 
             }
 
-        jQuery('#showUserlist').click(function(){
-            if(jQuery('.userDetails').is(':hidden'))
-            {
-                loadData(1);
-                jQuery('#Spantextless').show();
-                jQuery('#Spantextmore').hide();
-            }else
-            {
-                jQuery('#Spantextmore').show();
-                jQuery('#Spantextless').hide();
-            }
-            jQuery('.userDetails').slideToggle();
-         });
-
            jQuery("#display_list").multiselect({
                  header: false,
                  checkall: false
@@ -498,6 +484,7 @@ require([
                 $(this).parents('td').find('.loading-ajax').show();
                 var ord_track_btn = jQuery(this).val();
                 var ord_track_status = $("input[name='ord_track_status']:checked").val();
+                var import_order_data = $("input[name='import_order_data']:checked").val();
                 var form_key = jQuery("#form_key").val();
                 var file_url = jQuery("#ajaxcontentUrl").val();
                 $.ajax({
@@ -507,7 +494,8 @@ require([
                     data: {
                         "form_key": form_key,
                         "ord_track_status": ord_track_status,
-                        "ord_track_btn": ord_track_btn
+                        "ord_track_btn": ord_track_btn,
+                        "import_order_data": import_order_data
                     },
                     beforeSend: function() {
                         $('#ajax-busy').show();
@@ -516,6 +504,56 @@ require([
 
                         $('#ajax-busy').hide();
                         $('.loading-ajax').hide();
+                        alert(msg);
+                    }
+                });
+            });
+
+            $(".sib_track_cls_btn").click(function() {
+                $(this).parents('td').find('.loading-ajax').show();
+                var sib_tracking = jQuery(this).val();
+                var sib_track_status = $("input[name='sib_track_status']:checked").val();
+                var form_key = jQuery("#form_key").val();
+                var file_url = jQuery("#ajaxcontentUrl").val();
+                $.ajax({
+                    type: "POST",
+                    url: file_url,
+                    data: {
+                        "form_key": form_key,
+                        "sib_track_status": sib_track_status,
+                        "sib_tracking": sib_tracking
+                    },
+                    beforeSend: function() {
+                        $('#ajax-busy').show();
+                    },
+                    success: function(msg) {
+
+                        $('#ajax-busy').hide();
+                        $('.loading-ajax').hide();
+                        alert(msg);
+                    }
+                });
+            });
+
+            $(".sib_contact_sync_cls_btn").click(function() {
+  //              $(this).prop('disabled', true);
+                $(this).parents('td').find('.loading-ajax').show();
+                var sib_sync_list = $("#sib_contact_sync_list").val();
+                var sib_sync_status = $("input[name='sib_contact_sync_status']:checked").val();
+                var form_key = jQuery("#form_key").val();
+                var file_url = jQuery("#ajaxcontentUrl").val();
+                $.ajax({
+                    type: "POST",
+                    url: file_url,
+                    data: {
+                        "form_key": form_key,
+                        "sib_contact_sync_list": sib_sync_list,
+                        "sib_contact_sync_status": sib_sync_status,
+                        "sync_cron_activate": true
+                    },
+                    success: function(msg) {
+                        $('.loading-ajax').hide();
+//                        $(".sib_contact_sync_cls_btn").removeAttr("disabled");
                         alert(msg);
                     }
                 });
@@ -527,6 +565,15 @@ require([
                 var smtps_tatus = $("input[name='smtpservices']:checked").val();
                 var form_key = jQuery("#form_key").val();
                 var file_url = jQuery("#ajaxcontentUrl").val();
+                var smtp_pass = jQuery("#smtp_password").val();
+                var pass_error = jQuery('#pass_field').val();
+
+                if (smtps_tatus == 1 && smtp_pass == '') {
+                    alert(pass_error);
+                    document.getElementById('smtp_password').focus();
+                    $('.loading-ajax').hide();
+                    return false;
+                }
                 if (smtptest == 0) {
                     $('#smtptest').hide();
                 }
@@ -535,12 +582,12 @@ require([
                 }
                 $.ajax({
                     type: "POST",
-                    async: false,
                     url: file_url,
                     data: {
                         "form_key":form_key,
                         "smtps_tatus": smtps_tatus,
-                        "smtp_post": smtp_post
+                        "smtp_post": smtp_post,
+                        "smtp_pass": smtp_pass
                     },
                     beforeSend: function() {
                         $('#ajax-busy').show();
@@ -554,46 +601,6 @@ require([
                 });
             });
 
-            var radios = $('input:radio[name=managesubscribe]:checked').val();
-
-            if (radios == 0) {
-                $('.managesubscribeBlock').hide();
-            } else {
-                $('.managesubscribeBlock').show();
-            }
-
-            $(".managesubscribecls").click(function() {
-                $(this).parents('td').find('.loading-ajax').show();
-                var submitButton = jQuery(this).val();
-                var managesubscribe = $("input[name='managesubscribe']:checked").val();
-                var form_key = jQuery("#form_key").val();
-                var file_url = jQuery("#ajaxcontentUrl").val();
-
-                if (managesubscribe == 0) {
-                    $('.managesubscribeBlock').hide();
-                }
-                if (managesubscribe == 1) {
-                    $('.managesubscribeBlock').show();
-                }
-                $.ajax({
-                    type: "POST",
-                    async: false,
-                    url : file_url,
-                    data: {
-                        "managesubscribe": managesubscribe,
-                        "form_key": form_key,
-                        "manageSubsVal": submitButton
-                    },
-                    beforeSend: function() {
-                        $('#ajax-busy').show();
-                    },
-                    success: function(msg) {
-                        $('#ajax-busy').hide();
-                        $('.loading-ajax').hide();
-                        alert(msg);
-                    }
-                });
-            });
             //select multiple list for file name
             $("#oem_list")
                 .change(function() {
@@ -610,44 +617,6 @@ require([
                     $("#em_text_val").val(str);
                 })
                 .change();
-
-            //hide and show order import tab
-            $(".ord_track_cls_btn").click(function() {
-                var tracktest = $("input[name='ord_track_status']:checked").val();
-                if (tracktest == 0) {
-                    $('#ordertrack').hide();
-                }
-                if (tracktest == 1) {
-                    $('#ordertrack').show();
-                }
-            });
-            $("#importOrderTrack").click(function() {
-                $(this).parents('td').find('.loading-ajax').show();
-                var order_import_post = jQuery('#importact').val();
-                var ord_track_status = $('input:radio[name=ord_track_status]:checked').val();
-                var form_key = jQuery("#form_key").val();
-                var file_url = jQuery("#ajaxcontentUrl").val();
-
-                $.ajax({
-                    type: "POST",
-                    async: false,
-                    url: file_url,
-                    data: {
-                        "form_key": form_key,
-                        "order_import_post": order_import_post,
-                        "ord_track_status": ord_track_status
-                    },
-                    beforeSend: function() {
-                        $('#ajax-busy').show();
-                    },
-                    success: function(msg) {
-                        $('#ajax-busy').hide();
-                        $('#ordertrack').hide();
-                        $('.loading-ajax').hide();
-                        alert(msg);
-                    }
-                });
-            });
 
             $('.testOrdersmssend').on('click', function() {
                 var order_send_post = jQuery(this).val();
@@ -676,7 +645,6 @@ require([
 
                 $.ajax({
                     type: "POST",
-                    async: false,
                     url: file_url,
                     data: {
                         "form_key": form_key,
@@ -727,7 +695,6 @@ require([
 
                 $.ajax({
                     type: "POST",
-                    async: false,
                     url: file_url,
                     data: {
                         "form_key": form_key,
@@ -777,7 +744,6 @@ require([
                 } else {
                     $.ajax({
                         type: "POST",
-                        async: false,
                         url: file_url,
                         data: {
                             "form_key": form_key,
@@ -857,81 +823,6 @@ require([
                     document.getElementById('sender_campaign_message').focus();
                     return false;
                 }
-            });
-
-            jQuery('body').on('click', '.ajax_contacts_href', function (e) {
-               jQuery(this).parent('td').append('<div class="loader-contact"></div>');
-                var email = jQuery(this).attr('email');
-                var status = jQuery(this).attr('status');
-                var ajaxUrl = jQuery("#ajaxcontentUrl").val();
-                var form_key = jQuery("#form_key").val();
-                var contact_subs = 'contact_subs';
-
-                jQuery.ajax({
-                        type : "POST",
-                        async : false,
-                        url : ajaxUrl,
-                        data : {
-                            "form_key": form_key,
-                            "email": email,
-                            "newsletter": status,
-                            "contact_subs": contact_subs
-                        },
-                        beforeSend : function() {
-                            $('.midleft').next('.loading-ajax').css({
-                            'display': 'inline-block'
-                        });
-                        $('#ajax-busy').show();
-                        },
-                        success : function(msg) {
-                            jQuery('.loading-ajax').hide();            
-                        }
-                    });
-
-                var page_no = jQuery('#pagenumber').val();
-
-                loadData(page_no); // For first time page load      
-            });
-
-            function loadData(page) {
-                var form_key = jQuery("#form_key").val();
-                var file_url = jQuery("#ajaxcontentUrl").val();
-                var contact_data = 'contact_load';
-                $.ajax({
-                    type: "POST",
-                    async: false,
-                    url: file_url,
-                    data: {
-                        "page": page,
-                        "form_key": form_key,
-                        "contact_data": contact_data
-                    },
-                    beforeSend: function() {
-                        $('#showUserlist').next('.loading-ajax').css({
-                            'display': 'inline-block'
-                        });
-                        $('#ajax-busy').show();
-                    },
-                    success: function(msg) {
-                        $('.loading-ajax').hide();
-                        $(".midleft").html(msg);
-                        $(".midleft").ajaxComplete(
-                            function(event, request, settings) {
-                                $(".midleft").html(msg);
-                            });
-                        return true;
-                    }
-                });
-            }
-
-            //loadData(1, token); // For first time page load
-            // default
-            // results
-
-            jQuery('body').on('click',' .pagination li.active',function() {
-                var page = jQuery(this).attr('p');
-                jQuery('#pagenumber').val(page);
-                loadData(page);
             });
 
             $('.toolTip').on('mouseover mouseout', function(e) {

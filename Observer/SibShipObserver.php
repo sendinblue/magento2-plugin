@@ -26,7 +26,6 @@ class SibShipObserver implements ObserverInterface
 
         $shipment = $observer->getEvent()->getShipment();
         $order = $shipment->getOrder();
-        $apiKey = $model->getDbData('api_key');
         $dateValue = $model->getDbData('sendin_date_format');
         $orderStatus = $model->getDbData('api_sms_shipment_status');
         $senderOrder = $model->getDbData('sender_shipment');
@@ -40,9 +39,6 @@ class SibShipObserver implements ObserverInterface
         $dateAdded = $orderData['created_at'];
         $sibStatus = $model->syncSetting();
         if ($sibStatus == 1) {
-            if (!empty($apiKey)) {
-                $mailin = $model->createObjMailin($apiKey);
-            }
             if (!empty($dateValue) && $dateValue == 'dd-mm-yyyy') {
                 $orderDate = date('d-m-Y', strtotime($dateAdded));
             } else {

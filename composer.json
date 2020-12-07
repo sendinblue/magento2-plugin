@@ -2,12 +2,12 @@
    "name": "sendinblue/module-sendinblue", 
    "description": "N/A",  
    "type": "magento2-module",
-   "version": "2.0.6",
+   "version": "2.1.1",
    "license": [
       "OSL-3.0",
       "AFL-3.0" 
    ],
-   "author": [
+   "authors": [
       {
          "name": "amar",
          "email": "amarpaney@sendinblue.com",

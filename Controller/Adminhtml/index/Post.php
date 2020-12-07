@@ -29,6 +29,7 @@ class Post extends \Magento\Backend\App\Action
         }
         try {
             $model = $this->sibObject();
+
             if (isset($post['submitUpdate']) && !empty($post['submitUpdate'])) {
                 $this->apiKeyPostProcessConfiguration();
             }
@@ -154,39 +155,29 @@ class Post extends \Magento\Backend\App\Action
             $scopeInerface = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
             if ($status == 1) {
                 $apikey = trim($post['apikey']);
-                $rowList = $model->checkApikey($apikey);
-
-                if (isset($rowList) && $rowList['code'] == 'success' && $rowList['message'] == 'Data retrieved') {
-                    //If a user enters a new API key, we remove all records that belongs to the
-                    //old API key.
-                    $oldApiKey = trim($model->_getValueDefault->getValue('sendinblue/api_key', $scopeInerface));
-
-                    // Old key
-                    if ($apikey != $oldApiKey) {
-                        // Reset data for old key
-                        $model->resetDataBaseValue();
-                        $model->resetSmtpDetail();
-                    }
-
-                    if (isset($apikey)) {
-                        $model->_resourceConfig->saveConfig('sendinblue/api_key', $apikey, $model->_scopeTypeDefault, $model->_storeId);
-                    }
-
-                    if (isset($status)) {
-                        $model->_resourceConfig->saveConfig('sendinblue/api_key_status', $status, $model->_scopeTypeDefault, $model->_storeId);
-                    }
-
-                    $sendinListdata = $model->_getValueDefault->getValue('sendinblue/selected_list_data', $scopeInerface);
-                    $sendinFirstrequest = $model->_getValueDefault->getValue('sendinblue/first_request', $scopeInerface);
+                //We remove all records that belongs to the old API
+                $oldApiKey = trim($model->_getValueDefault->getValue('sendinblue/api_key_v3', $scopeInerface));
+                if ($apikey != $oldApiKey) {
+                    $model->resetDataBaseValue();
+                    $model->resetSmtpDetail();
+                }
+                $model->_resourceConfig->saveConfig('sendinblue/api_key_v3', $apikey, $model->_scopeTypeDefault, $model->_storeId);
+                $model->_resourceConfig->saveConfig('sendinblue/api_key_status', $status, $model->_scopeTypeDefault, $model->_storeId);
+                $sendinListdata = $model->_getValueDefault->getValue('sendinblue/selected_list_data', $scopeInerface);
+                $sendinFirstrequest = $model->_getValueDefault->getValue('sendinblue/first_request', $scopeInerface);
                     
-                    if (empty($sendinListdata) && empty($sendinFirstrequest)) {
-                        $model->_resourceConfig->saveConfig('sendinblue/first_request', 1, $model->_scopeTypeDefault, $model->_storeId);
-                        $model->_resourceConfig->saveConfig('sendinblue/subscribe_setting', 1, $model->_scopeTypeDefault, $model->_storeId);
-                        $model->_resourceConfig->saveConfig('sendinblue/notify_cron_executed', 0, $model->_scopeTypeDefault, $model->_storeId);
-                        $model->_resourceConfig->saveConfig('sendinblue/syncronize', 1, $model->_scopeTypeDefault, $model->_storeId);
+                if (empty($sendinListdata) && empty($sendinFirstrequest)) {
+                    $model->_resourceConfig->saveConfig('sendinblue/first_request', 1, $model->_scopeTypeDefault, $model->_storeId);
+                    $model->_resourceConfig->saveConfig('sendinblue/subscribe_setting', 1, $model->_scopeTypeDefault, $model->_storeId);
+                    $model->_resourceConfig->saveConfig('sendinblue/notify_cron_executed', 0, $model->_scopeTypeDefault, $model->_storeId);
+                    $model->_resourceConfig->saveConfig('sendinblue/syncronize', 1, $model->_scopeTypeDefault, $model->_storeId);
+                }
 
-                        $model->createFolderName($apikey);
-                    }
+                $response = $model->checkApikey($apikey);
+
+                if ($response) {
+                    $model->createAttributesName($apikey, $response);
+                    $model->createFolderName($apikey);
                     $this->messageManager->addSuccess(
                         __('Sendiblue configuration setting Successfully updated')
                     );
@@ -204,6 +195,8 @@ class Post extends \Magento\Backend\App\Action
                 }
             }
         } catch (\Exception $e) {
+            $model->_resourceConfig->saveConfig('sendinblue/api_key_status', 0, $model->_scopeTypeDefault, $model->_storeId);
+            $model->resetDataBaseValue();
             $this->messageManager->addError(
                 __('API key is invalid.')
             );
@@ -239,56 +232,53 @@ class Post extends \Magento\Backend\App\Action
         $doubleoptinRedirectUrl = !empty($post['doubleoptin_redirect_url']) ? $post['doubleoptin_redirect_url'] : '';
         $finalConfirmEmail = !empty($post['final_confirm_email']) ? $post['final_confirm_email'] : '';
         $finalTempId = !empty($post['template_final']) ? $post['template_final'] : '';
-        $shopApiKey = $model->getDbData('api_key');
+        $manageSubscribe = !empty($post['managesubscribe']) ? $post['managesubscribe'] : 0;
+        $shopApiKeyStatus = $model->getDbData('api_key_status');
 
         $model->updateDbData('doubleoptin_template_id', $doubleOptinTempId);
         $model->updateDbData('template_id', $valueTemplateId);
         $model->updateDbData('optin_url_check', $optinRedirectUrlCheck);
         $model->updateDbData('doubleoptin_redirect', $doubleoptinRedirectUrl);
         $model->updateDbData('final_confirm_email', $finalConfirmEmail);
+        $model->updateDbData('subscribe_setting', $manageSubscribe);
         if (!empty($finalTempId)) {
             $model->updateDbData('final_template_id', $finalTempId);
         }
         $model->updateSender();
         if (!empty($subscribeConfirmType)) {
             $model->updateDbData('confirm_type', $subscribeConfirmType);
-            if ($subscribeConfirmType == 'doubleoptin') {
-                $resOptin = $model->checkFolderListDoubleoptin($shopApiKey);
+            if ($subscribeConfirmType == 'doubleoptin') {   
+                $resOptin = $model->checkFolderListDoubleoptin();
                 if (!empty($resOptin['optin_id'])) {
                     $model->updateDbData('optin_list_id', $resOptin['optin_id']);
                 }
 
-                if ($resOptin === false) {
-                    $mailin = $model->createObjMailin($shopApiKey);
-                    if (!empty($shopApiKey)) {
-                        $data = [];
-                        $data = ["name"=> "FORM"];
-                        $folderRes = $mailin->createFolder($data);
-                        $folderId = $folderRes['data']['id'];
-                    }
-
-                    if (!empty($shopApiKey)) {
+                if ( $resOptin === false && !empty($shopApiKeyStatus) ) {
+                    $mailin = $model->createObjSibClient();
+                    $data = [];
+                    $data = ["name"=> "FORM"];
+                    $folderRes = $mailin->createFolder($data);
+                    if (201 === $mailin->getLastResponseCode()) {
                         $data = [];
                         $data = [
-                          "list_name" => 'Temp - DOUBLE OPTIN',
-                          "list_parent" => $folderId
+                          "name" => 'Temp - DOUBLE OPTIN',
+                          "folderId" => $folderRes["id"]
                         ];
                         $listResp = $mailin->createList($data);
-                        $listId = $listResp['data']['id'];
-                        $model->updateDbData('optin_list_id', $listId);
+                        if (201 === $mailin->getLastResponseCode()) {
+                            $listId = $listResp['id'];
+                            $model->updateDbData('optin_list_id', $listId);
+                        }
                     }
                 }
             }
         }
         $displayList = $post['display_list'];
         if (!empty($displayList)) {
-            if ($model->getDbData('subscribe_setting') == 1) {
                 $listValue = implode('|', $displayList);
                 $model->updateDbData('selected_list_data', $listValue);
-            } else {
-                $model->updateDbData('subscribe_setting', 0);
-            }
         }
+        
         $this->messageManager->addSuccess(__('Sendiblue configuration setting Successfully updated'));
         $this->_redirect('sendinblue/sib/index');
         return true;

@@ -4,6 +4,7 @@ $dbConfig = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterfa
 $model = $objectManager->get('Sendinblue\Sendinblue\Model\SendinblueSib');
 
 $apiKey = !empty($model->getDbData('api_key')) ? $model->getDbData('api_key') : '';
+$apiKeyV3 = !empty($model->getDbData('api_key_v3')) ? $model->getDbData('api_key_v3') : '';
 $apiKeyStatus = !empty($model->getDbData('api_key_status'))
  ? $model->getDbData('api_key_status') : '';
 
@@ -38,7 +39,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
             <!-- Header start -->
             <div class="header">
             <a href="#" class="logo"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/sendinblue.png'); ?>" /></a>
-            <h3><?php echo __('Sendinblue : THE all-in-one plugin for your marketing and transactional emails.'); ?></h3>
+            <h3><?php echo __('Sendinblue : The all-in-one plugin for your marketing and transactional emails.'); ?></h3>
             <div class="clearfix"></div>
 
             </div>
@@ -47,10 +48,12 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
             
             <ul class="main-tabs">
                 <li><a data-id="#about-sendinblue" id="about-sendinblue" href="javascript:void(0)" class="active"><?php echo __('About Sendinblue'); ?></a></li>
-                <li><a data-id="#subscribe-manager" id="subscribe-manager" href="javascript:void(0)"><?php echo __('Subscribe Manager'); ?></a></li>
-                <li><a data-id="#code-tracking" id="code-tracking" href="javascript:void(0)"><?php echo __('Code tracking'); ?></a></li>
-                <li><a data-id="#transactional-email-sms-management" id="transactional-email-sms-management" href="javascript:void(0)"><?php echo __('Transactional Emails and SMS Management'); ?></a></li>
-                <li><a data-id="#contact-list" id="contact-list" href="javascript:void(0)"><?php echo __('Contact List'); ?></a></li>
+                <li><a data-id="#contact-sync-tab" id="contact-sync-tab" href="javascript:void(0)"><?php echo __('Contact Sync'); ?></a></li>
+                <li><a data-id="#subscribe-manager" id="subscribe-manager" href="javascript:void(0)"><?php echo __('Subscription Confirmation'); ?></a></li>
+                <li><a data-id="#code-tracking" id="code-tracking" href="javascript:void(0)"><?php echo __('Order Sync'); ?></a></li>
+                <li><a data-id="#sendinblue-tracking" id="sendinblue-tracking" href="javascript:void(0)"><?php echo __('Behavior Tracking'); ?></a></li>
+                <li><a data-id="#transactional-email-management" id="transactional-email-management" href="javascript:void(0)"><?php echo __('Transactional Mailing'); ?></a></li>
+                <li><a data-id="#transactional-sms-management" id="transactional-sms-management" href="javascript:void(0)"><?php echo __('SMS'); ?></a></li>
             </ul>
 
             <div class="clearfix"></div>
@@ -124,16 +127,16 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                             ?>
                             <div class="form-element-box">
                                 <label><input <?php if($model->getDbData('api_key_status') == 1) { echo 'checked = "checked"'; } ?> class="keyyes" id="y" name="status" type="radio" value="1"> <?php echo __('Yes'); ?></label>
-                                <label><input <?php if($model->getDbData('api_key_status') == 0) { echo 'checked = "checked"'; } ?> class="keyyes" id="n" name="status" type="radio" value="0"> <?php echo __('No'); ?></label>
+                                <label>&emsp;<input <?php if($model->getDbData('api_key_status') == 0) { echo 'checked = "checked"'; } ?> class="keyyes" id="n" name="status" type="radio" value="0"> <?php echo __('No'); ?></label>
                             </div>
                             <div class="clearfix"></div>
                             </div>
                             <div class="clearfix"></div>
                             <div class="form-row">
                             <div id="apikeybox" <?php echo $str; ?>>
-                                <div class="form-row-title key"><?php echo __('API key v2'); ?> </div>
+                                <div class="form-row-title key"><?php echo __('API key v3'); ?> </div>
                                 <div class="form-element-box key">
-                                    <input id="apikeys" name="apikey" type="text" value="<?php echo $apiKey; ?>" class="pull-left margin-right-xxs">
+                                    <input id="apikeys" name="apikey" type="text" value="<?php echo $apiKeyV3; ?>" class="pull-left margin-right-xxs">
                                     <div class="toolTip tooltip-form pull-left" title="<?php echo __("Please enter your API key from your Sendinblue account and if you don't have it yet, please go to www.sendinblue.com and subscribe. You can then get the API key from https://my.sendinblue.com/advanced/apikey"); ?>"></div>
                                 </div>
                             </div>
@@ -168,19 +171,17 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                     </style>
                     <?php } ?>
                     
-                    <h2 class="heading"><?php echo $newIconSvg; ?><?php echo __('Activate Sendinblue to manage subscribers'); ?></h2>
+                    <h2 class="heading"><?php echo $newIconSvg; ?><?php echo __('Use Sendinblue subscription confirmation options to manage opt-in settings'); ?></h2>
                     
                     <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#subscribe-manager" method="post">
                     <input name="form_key" id="form_key" type="hidden" value="<?php echo $formKey ?>" />
                         <table cellpadding="0" cellspacing="0" class="table tableblock hidetableblock form-data" width="100%">
                             <tbody>
                                 <tr>
-                                    <td style="width:250px"><label><?php echo __('Activate Sendinblue to manage subscribers'); ?></label></td>
+                                    <td style="width:250px"><label><?php echo __('Use Sendinblue subscription confirmation options to manage opt-in settings'); ?></label></td>
                                     <td class="ver_5">
                                     <label class="input-label"><input class="managesubscribe" <?php if($model->getDbData('subscribe_setting') == 1) { echo "checked"; } ?> id="managesubscribe" name="managesubscribe" type="radio" value="1"> <?php echo __('Yes'); ?> </label>
                                     <label class="input-label"><input class="managesubscribe" <?php if($model->getDbData('subscribe_setting') == 0) { echo "checked"; } ?> id="managesubscribe" name="managesubscribe" type="radio" value="0"> <?php echo __('No'); ?> </label>
-                                    <label class="input-label"><input class="button btn-primary btn btn-xs managesubscribecls" type="button" value="<?php echo __('Update');?>"></label>
-                                    <div class="loading-ajax" style="display: none; width: auto;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>
                                     </td>
                                 </tr>
                                 <tr class="managesubscribeBlock">
@@ -188,21 +189,18 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                     <td>
                                         <div class="listData" style="text-align:left;">
                                         <?php 
-                                                $rowList = $model->getResultListValue($apiKey);
-                                                $row = $rowList['data'];
-                                                if (empty($row)) {
-                                                    return false;
+                                                $listArray = array();
+                                                $rowList = array("lists" => array(), "count" => 0);
+                                                if( !empty($apiKeyStatus) )  {
+                                                    $rowList = $model->getResultListValue();
                                                 }
                                                 $selectedlist = $model->getDbData('selected_list_data');
-                                                 if(!empty($selectedlist)){
-                                                        $listArray = explode('|', $selectedlist);
-                                                     } else {
-                                                            $listArray = array();
-                                                        }
-        
+                                                if ( !empty($selectedlist) ) {
+                                                    $listArray = explode('|', $selectedlist);
+                                                }
                                         ?>
                                             <select multiple="multiple" name="display_list[]" id = "display_list">
-                                                <?php foreach ($row as $valueArray) { ?>
+                                                <?php foreach ($rowList['lists'] as $valueArray) { ?>
                                                 <option value="<?php echo (int)$valueArray['id']; ?>" <?php if (in_array($valueArray['id'], $listArray)) echo 'selected = "selected"' ?> >
                                                     <?php echo $valueArray['name']; ?>
                                                 </option>
@@ -217,7 +215,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                     <td></td>
                                 </tr>
                                 <tr class="managesubscribeBlock">
-                                    <td></td>
+                                    <td><label><?php echo __('Manage how a subscription is confirmed after the form is submitted'); ?></label></td>
                                     <td>
                                         <div class="col-md-6 left-wrapper radio_group_option">
                                             <div class="form-group manage_subscribe_block">
@@ -247,7 +245,10 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                                         <div class="listData ver_5 managesubscribeBlock" style="text-align: left;">
                                                             <div class="listData ver_5 managesubscribeBlock" style="text-align: left;">
                                                                 <?php
-                                                                $camp = $model->templateDisplay($apiKey);
+                                                                $camp = array("templates" => array(), "count" => 0);
+                                                                if ( !empty($apiKeyStatus) ) {
+                                                                    $camp = $model->templateDisplay();
+                                                                }
                                                                 $tempIdDb = $model->getDbData('template_id');
                                                                 ?>
                                                                 <select class="ui-state-default" name="template" style="width: 225px; border-radius:4px; margin:10px 0;">
@@ -255,14 +256,12 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                                                         <?php echo __('Select Template'); ?>
                                                                     </option>
                                                                     <?php 
-                                                                    if (!empty($camp['campaign_records'])) {
-                                                                        foreach ($camp['campaign_records'] as $templateData) {
-                                                                            if ($templateData['templ_status'] === 'Active' && stristr($templateData['html_content'], 'doubleoptin') === false) {
-                                                
+                                                                    if (!empty($camp['templates'])) {
+                                                                        foreach ($camp['templates'] as $templateData) {
+                                                                            if ($templateData['isActive'] && stristr($templateData['htmlContent'], 'doubleoptin') === false) {
                                                                     ?>
-        
                                                                     <option value="<?php echo $templateData['id']; ?>"  <?php if (trim($tempIdDb) == trim($templateData['id']) ) { echo 'selected="selected"'; } ?> >
-                                                                        <?php echo $templateData['campaign_name']; ?>
+                                                                        <?php echo $templateData['name']; ?>
                                                                     </option>
                                                                     <?php }}} ?>
                                                                 </select><span class="toolTip" title="<?php echo __('Select a Sendinblue template that will be sent personalized for each contact that subscribes to your newsletter'); ?> "></span>
@@ -296,14 +295,14 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
         
                                                             <?php 
                                                             $doubleOptinTempId = $model->getDbData('doubleoptin_template_id');
-                                                            if (!empty($camp['campaign_records'])) {
-                                                                foreach ($camp['campaign_records'] as $templateData) {
-                                                                    if ($templateData['templ_status'] === 'Active' && stristr($templateData['html_content'], 'doubleoptin') == true) {
+                                                            if (!empty($camp['templates'])) {
+                                                                foreach ($camp['templates'] as $templateData) {
+                                                                    if ($templateData['isActive'] === true && stristr($templateData['htmlContent'], 'doubleoptin') == true) {
                                                                         if (trim($templateData['id']) == trim($doubleOptinTempId)) { echo  'selected="selected"'; }
                                                             ?>
         
                                                             <option value="<?php echo $templateData['id']; ?>" <?php if (trim($templateData['id']) == trim($doubleOptinTempId)) { echo  'selected="selected"'; } ?> >
-                                                                <?php echo $templateData['campaign_name']; ?>
+                                                                <?php echo $templateData['name']; ?>
                                                             </option>
                                                             <?php }}} ?>
                                                             
@@ -344,14 +343,14 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
         
                                                                          <?php 
                                                                          $optinTempDb = $model->getDbData('final_template_id');
-                                                                    if (!empty($camp['campaign_records'])) {
-                                                                        foreach ($camp['campaign_records'] as $templateData) {
-                                                                            if ($templateData['templ_status'] === 'Active' && stristr($templateData['html_content'], 'doubleoptin') === false) {
+                                                                    if (!empty($camp['templates'])) {
+                                                                        foreach ($camp['templates'] as $templateData) {
+                                                                            if ($templateData['isActive'] === true && stristr($templateData['htmlContent'], 'doubleoptin') === false) {
                                                                                 if (trim($templateData['id']) == trim($optinTempDb)) { echo  'selected="selected"'; }
                                                                     ?>
         
                                                                     <option value="<?php echo $templateData['id']; ?>" <?php if (trim($templateData['id']) == trim($optinTempDb)) { echo  'selected="selected"'; } ?> >
-                                                                        <?php echo $templateData['campaign_name']; ?>
+                                                                        <?php echo $templateData['name']; ?>
                                                                     </option>
                                                                     <?php }}} ?>
                                                                         
@@ -375,17 +374,8 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                     <td>&nbsp;</td>
                                     <td>
                                         <input name="update_tempvalue" type="hidden" value="update_tempvalue" />
-                                        <input class="button submitForm2 btn-primary btn" name="submitForm2" type="submit" value="<?php echo __('Update'); ?>">&nbsp;
-											<input name="import_function" type="hidden" value="import_function" />
-                                            <input class="button btn-success btn" name="submitUpdateImport" type="submit" value="<?php echo __('Import Old Subscribers'); ?>">
+                                        <input class="button submitForm2 btn-primary btn" name="submitForm2" type="submit" value="<?php echo __('Save'); ?>">
                                     </td>
-                                </tr>
-                                <tr class="managesubscribeBlock">
-                                    <td>&nbsp;</td>
-                                    <td>
-                                        <?php echo __('To synchronize the emails of your customers from Sendinblue platform to your e-commerce website, you should run '); ?><a href="<?php echo $this->getUrl("sendinblue/index/sync");?>" style="color: #000000; outline: 0 none; text-decoration: none;" target="_blank"><?php echo __('this link'); ?> </a><?php echo __('each day'); ?>
-                                    </td>
-                                </tr>       
                                 </tr>
                             </tbody>
                         </table>
@@ -400,39 +390,36 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                 
                     <!-- Section Start -->
                     <div class="form-box">
-                    <h2 class="heading"><?php echo $newIconSvg; ?><?php echo __('Code tracking'); ?></h2>
+                    <h2 class="heading"><?php echo $newIconSvg; ?><?php echo __('Order Sync'); ?></h2>
                      <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#code-tracking" id="ordtrack" method="post" name="ordtrack">
                      <input name="form_key" id="form_key" type="hidden" value="<?php echo $formKey ?>" />
                     <input name="ajaxcontentUrl" type="hidden" id="ajaxcontentUrl" value="<?php echo $this->getUrl("sendinblue/index/ajax");  ?>" />
                         <table cellpadding="0" cellspacing="0" class="table tableblock hidetableblock form-data" width="100%">
                             <tbody>
                                 <tr>
-                                    <td><label><?php echo __('Do you want to install a tracking code when validating an order'); ?></label> 
+                                    <td><label><?php echo __('Sync your customers\' order data'); ?></label> 
                                     <span class="ver_5">
                                     <label class="input-label"><input <?php if($model->getDbData('ord_track_status') == 1) { echo "checked"; } ?> class="ordertracking ord_track_cls radio_nospaceing" id="yesradio" name="ord_track_status" type="radio" value="1"> <?php echo __('Yes'); ?> </label>
                                     <label class="input-label"><input <?php if($model->getDbData('ord_track_status') == 0) { echo "checked"; } ?> class="ordertracking ord_track_cls radio_spaceing2" id="noradio" name="ord_track_status" type="radio" value="0"> <?php echo __('No'); ?></label> 
-                                    <span class="toolTip tooltip-radio" title="<?php echo __('This feature will allow you to transfer all your customers orders from Magento into Sendinblue to implement your email marketing strategy.'); ?>"></span>
+                                    <span class="toolTip tooltip-radio" title="<?php echo __('If the feature is enabled, the info about order made by your customer will be synced to Sendinblue in real time'); ?>"></span>
                                     </span>
-                                    <label class="input-label"><input class="button btn-primary btn btn-xs ord_track_cls_btn" type="button" value="<?php echo __('Update');?>"></label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label><?php echo __('Import your customers\' order history'); ?></label> 
+                                    <span class="ver_5">
+                                    <label class="input-label"><input class="radio_nospaceing" name="import_order_data" id="yesradio" name="" type="radio" value="1"> <?php echo __('Yes'); ?> </label>
+                                    <label class="input-label" style="padding-left: 20px;"><input checked="checked" name="import_order_data" class="radio_nospaceing" id="noradio" name="" type="radio" value="0"> <?php echo __('No'); ?> </label>
+                                    </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><br>
+                                    <label></label>
+                                    <input class="button btn-primary btn btn-xs ord_track_cls_btn" type="button" value="<?php echo __('Save');?>"></label>
                                     <div class="clearfix"></div>
                                     <label>&nbsp;</label>
                                     <div class="loading-ajax" style="display: none; width: auto;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>
-                                    </td>
-                                </tr>
-                                
-                                <?php
-                                $trackingStatus = $model->getDbData('order_import_status');
-                                $status = $model->getDbData('ord_track_status');
-                                ?>
-                                <tr id="ordertrack" <?php if($status == 0 && $trackingStatus == 0) { ?>style="display:none;" <?php } ?> >
-                                    <td>
-                                        <div id="div_order_track">
-                                            <input id="importact" name="importact" type="hidden" value="import_history">
-                                            <label>&nbsp;</label>
-                                            <a class="btn btn-primary text-white" style="text-decoration:none;" href="javascript:void(0);" id="importOrderTrack"><?php echo __('Import the data of previous orders');?></a></p>
-                                        </div>
-                                        <label>&nbsp;</label>
-                                        <div class="loading-ajax" style="display: none; width: auto;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -444,28 +431,142 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                 
                 </div>
                 
-                <div class="tab-pane" id="transactional-email-sms-management">
+                <!-- Start Automation tracking -->
+                <div class="tab-pane" id="sendinblue-tracking">
+                
+                    <!-- Section Start -->
+                    <div class="form-box">
+                    <h2 class="heading"><?php echo $newIconSvg; ?><?php echo __('Behavior Tracking'); ?></h2>
+                     <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#sib_tracking" id="sib_tracking" method="post" name="sib_tracking">
+                     <input name="form_key" id="form_key" type="hidden" value="<?php echo $formKey ?>" />
+                    <input name="ajaxcontentUrl" type="hidden" id="ajaxcontentUrl" value="<?php echo $this->getUrl("sendinblue/index/ajax");  ?>" />
+                        <table cellpadding="0" cellspacing="0" class="table tableblock hidetableblock form-data" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td><label><?php echo __('Allow Sendinblue to track visitor actions on your store website'); ?><br><br><nobr><?php echo __('Learn more about the Sendinblue Tracker'); ?>
+                                            <a style="color:#337ab7;" href="https://developers.sendinblue.com/docs/gettings-started-with-sendinblue-tracker"><?php echo __('here')?></a></nobr></label> 
+                                    <span class="ver_5">
+                                    <label class="input-label"><input <?php if($model->getDbData('sib_track_status') == 1) { echo "checked"; } ?> class="sibtracking sib_track_cls radio_nospaceing" id="yesradio" name="sib_track_status" type="radio" value="1"> <?php echo __('Yes'); ?> </label>
+                                    <label class="input-label"><input <?php if($model->getDbData('sib_track_status') == 0) { echo "checked"; } ?> class="sibtracking sib_track_cls radio_spaceing2" id="noradio" name="sib_track_status" type="radio" value="0"> <?php echo __('No'); ?></label> 
+                                    <span class="toolTip tooltip-radio" title="<?php echo __('Choose Yes if you want to use Sendinblue Automation to track your website activity'); ?>"></span>
+                                    </span>
+                                    <div class="clearfix"></div>
+                                    <label>&nbsp;</label>
+                                    <span>
+                                        <label class="input-label"><input class="button btn-primary btn btn-xs sib_track_cls_btn" type="button" value="<?php echo __('Save');?>"></label>
+                                        <div class="loading-ajax" style="display: none; width: auto;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>
+                                    <div class="clearfix"></div>
+                                    
+                                    </span>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                        </form>
+                        </div>
+                    <!-- Section Ends -->
+                    <div class="clearfix"></div>
+                
+                </div>
+
+                <!-- Start Contact Sync -->
+                <div class="tab-pane" id="contact-sync-tab">
+                
+                    <!-- Section Start -->
+                    <div class="form-box">
+                    <h2 class="heading"><?php echo $newIconSvg; ?><?php echo __('Contact Sync'); ?></h2>
+                     <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#sib_contact_sync" id="sib_contact_sync" method="post" name="sib_contact_sync">
+                     <input name="form_key" id="form_key" type="hidden" value="<?php echo $formKey ?>" />
+                    <input name="ajaxcontentUrl" type="hidden" id="ajaxcontentUrl" value="<?php echo $this->getUrl("sendinblue/index/ajax");  ?>" />
+                        <table cellpadding="0" cellspacing="0" class="table tableblock hidetableblock form-data" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td><label><?php echo __('Sync your store contacts to Sendinblue'); ?></label> 
+                                    <span class="ver_5">
+                                    <label class="input-label"><input <?php if($model->getDbData('sib_contact_sync_status') == 1) { echo "checked"; } ?> class="radio_nospaceing" id="yesradio" name="sib_contact_sync_status" type="radio" value="1"> <?php echo __('Yes'); ?> </label>
+                                    <label class="input-label"><input <?php if($model->getDbData('sib_contact_sync_status') == 0) { echo "checked"; } ?> class="radio_spaceing2" id="noradio" name="sib_contact_sync_status" type="radio" value="0"> <?php echo __('No'); ?></label> 
+                                    <span class="toolTip tooltip-radio" title="<?php echo __('Choose Yes if you want to Sync your store contacts to Sendinblue'); ?>"></span>
+                                    </span>
+                                    <div class="clearfix"></div>
+                                    <label>&nbsp;</label>
+                                    <div class="loading-ajax" style="display: none; width: auto;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label><?php echo __('Your lists'); ?></label>
+                                            <select name="sib_contact_sync_list" id = "sib_contact_sync_list">
+                                                <option value="0">Select List</option>
+                                                <?php foreach ($rowList['lists'] as $valueArray) { ?>
+                                                <option value="<?php echo (int)$valueArray['id']; ?>" <?php if ($model->getDbData('sib_contact_sync_list') == $valueArray['id']) echo 'selected = "selected"' ?> >
+                                                    <?php echo $valueArray['name']; ?>
+                                                </option>
+                                                <?php } ?>
+                                            </select>
+                                            <span class="toolTip listData" title="<?php echo __('Select the contact list where you want to sync the contacts.');?>">&nbsp;</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label></label>
+                                        <input class="button btn-primary btn btn-xs sib_contact_sync_cls_btn" type="button" value="<?php echo __('Save');?>">
+                                        <div class="clearfix"></div>
+                                        <div class="loading-ajax" style="display: none; width: auto;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>                        
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </form>
+                        </div>
+                    <!-- Section Ends -->
+                    <div class="clearfix"></div>
+                
+                </div>
+
+
+
+
+
+
+                <div class="tab-pane" id="transactional-email-management">
+
                 
                 <!-- Section Start -->
                 <div class="form-box">
                 <h2 class="heading"><?php echo $newIconSvg; ?><?php echo __('Activate Sendinblue SMTP for your transactional emails'); ?></h2>
-                <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#transactional-email-sms-management" method="post">
+                <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#transactional-email-management" method="post">
                 <input name="form_key" id="form_key" type="hidden" value="<?php echo $formKey ?>" />
                     <table cellpadding="0" cellspacing="0" class="table tableblock hidetableblock form-data" width="100%">
                             <tr>
                                     <td>
                                         
-                                        <label><?php echo __('Activate Sendinblue SMTP for your transactional emails'); ?></label> 
+                                        <label><?php echo __('Use Sendinblue to send your store\'s transactional mailing'); ?></label> 
                                         <span class="ver_5">
                                         <label class="input-label"><input <?php if($model->getDbData('api_smtp_status') == 1) { echo "checked"; } ?> class="smtptestclick radio_nospaceing" id="yessmtp" name="smtpservices" type="radio" value="1"><?php echo __('Yes'); ?> </label>
                                         <label class="input-label"><input class="smtptestclick radio_spaceing2" <?php if($model->getDbData('api_smtp_status') == 0) { echo "checked"; } ?> id="nosmtp" name="smtpservices" type="radio" value="0"><?php echo __('No'); ?> </label>
                                         <span class="toolTip tooltip-radio" title="<?php echo __('Transactional email is an expected email because it is triggered automatically after a transaction or a specific event. Common examples of transactional email are : account opening and welcome message, order shipment confirmation, shipment tracking and purchase order status, registration via a contact form, account termination, payment confirmation, invoice etc.'); ?>">&nbsp;</span>
-                                        <label class="input-label"><input class="button btn-primary btn btn-xs smtptestclickcls" type="button" value="<?php echo __('Update');?>"></label>
                                         </span>
                                         <div class="clearfix"></div>
                                         <div class="loading-ajax" style="display: none; width: auto; margin:auto; text-align:center; margin:10px 0;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>
                                     </td>
-                                        </tr>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div id="">
+                                            <label><?php echo __('Sendinblue SMTP master password'); ?></label>
+                                            <input id="smtp_password" name="smtp_password" class="input-text" size="40" type="text" value="">
+                                            <div class="clearfix"></div>
+                                         <input id="pass_field" name="pass_field" type="hidden" value="<?php echo __('SMTP Password is mandatory field'); ?>">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <td>
+                                    <label></label>
+                                    <label class="input-label"><input class="button btn-primary btn btn-xs smtptestclickcls" type="button" value="<?php echo __('Save');?>"></label>
+                                    <div class="clearfix"></div>
+                                    <div class="loading-ajax" style="display: none; width: auto; margin:auto; text-align:center; margin:10px 0;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>
+                                </td>
+
                                         <tr id="smtptest" <?php if($model->getDbData('api_smtp_status') != 1) { ?>style="display:none;" <?php } ?> >
                                             <td colspan="2">
                                                 <div id="div_email_test">
@@ -484,11 +585,14 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                 </div>
                 <!-- Section Ends -->
                 <div class="clearfix"></div>
-                    
+            </div>
+
+
+                <div class="tab-pane" id="transactional-sms-management">
                 <!-- Section Start -->
                 <div class="form-box">
                     
-                    <h2 class="heading"><?php echo $newIconSvg; ?><?php echo __('Manage SMS'); ?></h2>
+                    <h2 class="heading"><?php echo $newIconSvg; ?><?php echo __('SMS'); ?></h2>
                         <table cellpadding="0" cellspacing="0" class="table form-data tableblock hidetableblock" style="margin-bottom:15px;" width="100%">
                         <tbody>
                             <tr>
@@ -503,12 +607,16 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                     <label><?php echo __('You want to be notified by e-mail when you do not have enough credits?'); ?></label> <span class="ver_5">
                                     <label class="input-label"><input <?php if($model->getDbData('api_sms_credit') == 1) { echo "checked"; } ?> class="sms_credit radio_nospaceing" name="sms_credit" type="radio" value="1"> <?php echo __('Yes'); ?></label>
                                     <label class="input-label"><input <?php if($model->getDbData('api_sms_credit') == 0) { echo "checked"; } ?> class="sms_credit radio_spaceing2" name="sms_credit" type="radio" value="0"> <?php echo __('No'); ?></label></span>
-                                    <label class="input-label"><input class="button btn-primary btn btn-xs sms_credit_cls" type="button" value="<?php echo __('Update');?>"></label></span>
+                                    </span>
                                     <div class="clearfix"></div>
                                     <label>&nbsp;</label>
+                                    <span>
+                                    <label class="input-label"><input class="button btn-primary btn btn-xs sms_credit_cls" type="button" value="<?php echo __('Save');?>"></label>
+                                    </span>
+                                    <div class="clearfix"></div>
                                     <div class="loading-ajax" style="display: none; width: auto;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>
                                     <div class="hideCredit" id="div_email_test" style="padding-top: 20px;" <?php if($model->getDbData('api_sms_credit') != 1) { ?> style="display:none" <?php } ?>>
-                                        <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#transactional-email-sms-management" id="notify_sms_mail_form" method="post" name="notify_sms_mail_form">
+                                        <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#transactional-sms-management" id="notify_sms_mail_form" method="post" name="notify_sms_mail_form">
                                         <input name="form_key" id="form_key" type="hidden" value="<?php echo $formKey ?>" />
                                             <div id="errmsg" style="color:#F00"></div>
                                             <p class="form-data">
@@ -550,10 +658,15 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                             <div class="ver_5">
                                                 <label class="input-label"><input <?php if($model->getDbData('api_sms_order_status') == 1) { echo "checked"; } ?> class="sms_order_setting radio_nonspaceing" name="sms_order_setting" type="radio" value="1"> <?php echo __('Yes'); ?> </label>
                                                 <label class="input-label"><input <?php if($model->getDbData('api_sms_order_status') == 0) { echo "checked"; } ?> class="sms_order_setting radio_spaceing2" name="sms_order_setting" type="radio" value="0"> <?php echo __('No'); ?></label>
-                                                <label class="input-label"><input class="button btn-primary btn btn-xs sms_order_setting_cls" type="button" value="<?php echo __('Update');?>"></label>
+                                                
                                             </div>
                                             <div class="clearfix"></div>
                                             <label>&nbsp;</label>
+                                            <div class="clearfix"></div>
+                                            <label>&nbsp;</label>
+                                            <span>
+                                                <label class="input-label"><input class="button btn-primary btn btn-xs sms_order_setting_cls" type="button" value="<?php echo __('Save');?>"></label>
+                                            </span>
                                             <div class="loading-ajax" style="display: none; width: auto;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>
 
                                             <div class="hideOrder">
@@ -562,7 +675,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                                         <tbody>
                                                             <tr>
                                                                 <td style="padding:0">
-                                                                    <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#transactional-email-sms-management" id="sender_order_form" method="post" name="sender_order_form">
+                                                                    <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#transactional-sms-management" id="sender_order_form" method="post" name="sender_order_form">
                                                                     <input name="form_key" id="form_key" type="hidden" value="<?php echo $formKey ?>" />
                                                                         
                                                                         <table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -626,7 +739,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="2" valign="top">
-                                                                    <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#transactional-email-sms-management" id="sender_order_testForm" name="sender_order_testForm" method="post">
+                                                                    <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#transactional-sms-management" id="sender_order_testForm" name="sender_order_testForm" method="post">
                                                                     
                                                                         <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                                                             <tbody>
@@ -672,11 +785,14 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                             <span>
                                             <label class="input-label"><input <?php if($model->getDbData('api_sms_shipment_status') == 1) { echo "checked"; } ?> class="sms_shiping_setting radio_nonspaceing" name="sms_shiping_setting" type="radio" value="1"> <?php echo __('Yes'); ?></label>
                                             <label class="input-label"><input <?php if($model->getDbData('api_sms_shipment_status') == 0) { echo "checked"; } ?> class="sms_shiping_setting radio_spaceing2" name="sms_shiping_setting" type="radio" value="0"> <?php echo __('No'); ?></label>
-                                            <label class="input-label"><input class="button btn-primary btn btn-xs sms_shiping_setting_cls" type="button" value="<?php echo __('Update');?>"></label>
                                             </span> 
                                         </div>
                                         <div class="clearfix"></div>
                                         <label>&nbsp;</label>
+
+                                        <span>
+                                            <label class="input-label"><input class="button btn-primary btn btn-xs sms_shiping_setting_cls" type="button" value="<?php echo __('Save');?>"></label>
+                                        </span>
                                         <div class="loading-ajax" style="display: none; width: auto;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>
                                         <div class="hideShiping" style="margin-top: 33px;">
                                             <div class="form_table">
@@ -684,7 +800,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                                     <tbody>
                                                         <tr>
                                                             <td>
-                                                                <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#transactional-email-sms-management" id="sender_shipment_form" method="post" name="sender_shipment_form">
+                                                                <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#transactional-sms-management" id="sender_shipment_form" method="post" name="sender_shipment_form">
                                                                 <input name="form_key" id="form_key" type="hidden" value="<?php echo $formKey ?>" />
                                                                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                                                         <tbody>
@@ -746,7 +862,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                                         </tr>
                                                         <tr>
                                                             <td colspan="2" valign="top">
-                                                                <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#transactional-email-sms-management" id="sender_order_testForm" method="post" name="sender_order_testForm">
+                                                                <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#transactional-sms-management" id="sender_order_testForm" method="post" name="sender_order_testForm">
                                                                     <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                                                         <tbody>
                                                                             <tr>
@@ -790,19 +906,24 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                                             <span>
                                             <label class="input-label"><input <?php if($model->getDbData('api_sms_campaign_status') == 1) { echo "checked"; } ?> class="sms_campaign_setting radio_nonspaceing" name="sms_campaign_setting" type="radio" value="1"> <?php echo __('Yes'); ?></label>
                                             <label class="input-label"><input <?php if($model->getDbData('api_sms_campaign_status') == 0) { echo "checked"; } ?> class="sms_campaign_setting radio_spaceing2" name="sms_campaign_setting" type="radio" value="0"> <?php echo __('No'); ?></label>
-                                            <label class="input-label"><input class="button btn-primary btn btn-xs sms_campaign_setting_cls" type="button" value="<?php echo __('Update');?>"></label>
                                             </span>
+                                            <div class="clearfix"></div>
                                         </div>
+                                        <label>&nbsp;</label>
                                         <div class="clearfix"></div>
                                             <label>&nbsp;</label>
+                                            <span>
+                                                <label class="input-label"><input class="button btn-primary btn btn-xs sms_campaign_setting_cls" type="button" value="<?php echo __('Save');?>"></label>
+                                            </span>
                                             <div class="loading-ajax" style="display: none; width: auto;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>
+                                            <div class="clearfix"></div>
                                         <div class="hideCampaign">
                                             <div class="form_table" style="margin-top:33px;">
                                                 <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                                     <tbody>
                                                         <tr>
                                                             <td>
-                                                                <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#transactional-email-sms-management" id="campaign_sms_form" method="post" name="campaign_sms_form">
+                                                                <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#transactional-sms-management" id="campaign_sms_form" method="post" name="campaign_sms_form">
                                                                 <input name="form_key" id="form_key" type="hidden" value="<?php echo $formKey ?>" />
                                                                     <table border="0" cellpadding="0" cellspacing="0" class="form-data no-padding" width="100%">
                                                                         <tbody>
@@ -936,58 +1057,7 @@ $newIconSvg = '<svg viewBox="0 0 512 512" style="width:16px !important; height:1
                 <div class="clearfix"></div>
             
                 </div>
-            
-            <!-- start contact list Section-->
-            <div class="tab-pane" id="contact-list">
-                            
-                                <!-- Section Start -->
-                                <div class="form-box">
-                                <h2 class="heading"><?php echo $newIconSvg; ?><?php echo __('Contact List'); ?></h2>
-                                 <form action="<?php echo $this->getUrl("sendinblue/index/post");  ?>#contact-list" id="ordtrack" method="post" name="ordtrack">
-                                 <input name="form_key" id="form_key" type="hidden" value="<?php echo $formKey ?>" />
-                                <input name="ajaxcontentUrl" type="hidden" id="ajaxcontentUrl" value="<?php echo $this->getUrl("sendinblue/index/ajax");  ?>" />
-                                    <table cellpadding="0" cellspacing="0" class="table tableblock hidetableblock form-data" width="100%">
 
-                                    <div id="userGrid">
-                                             <div class="grid">
-                                                <div class="hor-scroll">
-                                                   <?php echo __('You have '); ?> <?php  echo $model-> getNewsletterSubscribeCount(); ?>
-                                                   <?php echo __(' contacts subscribed and '); ?> 
-                                                   <?php echo $model->getNewsletterUnSubscribeCount(); ?> 
-                                                   <?php echo __(' contacts unsubscribed from Magento.'); ?><span id="Spantextmore" >
-                                                   <?php echo __('For more details,'); ?></span><span id="Spantextless" style="display: none;" >
-                                                   <?php echo __(' For less details,'); ?></span><b>
-                                                   <a href="javascript:void(0);" id="showUserlist" style="color: #000000; outline: 0 none; text-decoration: none;"><?php echo __('click here'); ?></a>
-                                                   <div class="loading-ajax" style="display: none; width: auto;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>
-                                                   </b>
-                                                   <br><br>
-                                                   <table cellspacing="0" id="userGrid_table " class="data userDetails table-contacts" style='display:none;'>
-                                                   <div class="loading-ajax" style="display: none; width: auto;"><img src="<?php echo $block->getViewFileUrl('Sendinblue_Sendinblue::images/loadjs.gif'); ?>"></div>
-                                                      <thead>
-                                                         <tr class="headings">
-                                                            <th class="no-link"><span class="nobr"><?php echo __('Email'); ?></span></th>
-                                                            <th class="no-link"><span class="nobr"><?php echo __('clients'); ?></span></th>
-                                                            <th class="no-link"><span class="nobr"><?php echo __('SMS'); ?></span></th>
-                                                            <th class="no-link"><span class="nobr"><?php echo __('Newsletter Magento Status'); ?></span></th>
-                                                            <th class="no-link"><span class="nobr"><?php echo __('Newsletter Sendinblue Status'); ?><span title="<?php echo __('Click on the icon to subscribe / unsubscribe the contact from Sendinblue and Magento.'); ?>" class="toolTip">&nbsp;</span></span></th>
-                                                            <th class="no-link last"><span class="nobr"><?php echo __('SMS Sendinblue Status'); ?><span title="<?php echo __('Click on the icon to subscribe / unsubscribe the sms from Sendinblue and Magento.'); ?>" class="toolTip">&nbsp;</span></span></th>
-                                                         </tr>
-                                                      </thead>
-                                                      <tbody class='midleft'>
-                                                      </tbody>
-                                                   </table>
-                                                </div>
-                                            </div>
-                                         </div>
-
-                                    </table>
-                                    </form>
-                                    </div>
-                                <!-- Section Ends -->
-                                <div class="clearfix"></div>
-                            
-            </div>
-                <!-- Section Ends contact list -->
             </div>
             
         </div>
