@@ -23,7 +23,7 @@ class SendinblueSibClient
         if( empty($key) ) {
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
             $model = $objectManager->create('Sendinblue\Sendinblue\Model\SendinblueSib');
-            $this->apiKey = trim($model->_getValueDefault->getValue('sendinblue/api_key_v3', $model->_scopeTypeDefault));            
+            $this->apiKey = trim((string) $model->_getValueDefault->getValue('sendinblue/api_key_v3', $model->_scopeTypeDefault));
         }
         else {
             $this->apiKey = trim($key);
