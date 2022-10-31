@@ -1528,7 +1528,7 @@ class SendinblueSib extends \Magento\Framework\Model\AbstractModel
     public function checkPortStatus()
     {
         try {
-            $relay_port_status = fsockopen(‘smtp-relay.sendinblue.com’, 587);
+            $relay_port_status = fsockopen('smtp-relay.sendinblue.com', 587);
             if (!$relay_port_status) {
                 return 0;
             }
